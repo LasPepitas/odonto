@@ -1,7 +1,6 @@
 import {
   SignedIn,
   SignedOut,
-  SignIn,
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
@@ -17,7 +16,6 @@ function App() {
           <UserButton />
         </SignedIn>
       </header>
-      <SignIn />
     </div>
   );
 }
