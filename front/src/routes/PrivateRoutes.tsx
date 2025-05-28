@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 const PrivateRoutes = () => {
   const isAuthenticated = false; // Replace with actual authentication logic
