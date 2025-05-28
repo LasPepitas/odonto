@@ -1,22 +1,32 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DashboardLayout from "./components/layout/DashboardLayout";
+import PublicRoutes from "./routes/PublicRoutes";
+import PrivateRoutes from "./routes/PrivateRoutes";
+import { LoginForm } from "./features/auth/components/LoginForm";
+import { RegisterForm } from "./features/auth/components/RegisterForm";
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh bg-slate-800 gap-y-5">
-      <header className="flex items-center justify-between w-full max-w-4xl p-4 bg-white rounded-lg shadow-md">
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PublicRoutes />} />
+        <Route element={<PublicRoutes />}>
+          <Route
+            path="/login"
+            element={<LoginForm onToggleMode={() => {}} />}
+          />
+          <Route
+            path="/register"
+            element={<RegisterForm onToggleMode={() => {}} />}
+          />
+          <Route path="/forgot-password" element={<PublicRoutes />} />
+          <Route path="/reset-password/:token" element={<PublicRoutes />} />
+        </Route>
+        <Route element={<PrivateRoutes />}>
+          <Route path="/dashboard/*" element={<DashboardLayout />} />
+        </Route>
+        <Route path="*" element={<PublicRoutes />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
