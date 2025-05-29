@@ -123,5 +123,12 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    App\Providers\ModuleServiceProvider::class,
+    // App\Providers\ModuleServiceProvider::class,
+
+    // CONFIGURACION PERSONAL
+    // 'providers' => [
+    //     // Otros providers
+    //     // App\Providers\RouteServiceProvider::class, //lógica que mapea los módulos
+    //     // Illuminate\Filesystem\FilesystemServiceProvider::class,
+    // ],
 ];
