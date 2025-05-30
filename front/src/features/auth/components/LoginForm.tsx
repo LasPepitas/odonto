@@ -17,6 +17,8 @@ interface LoginFormProps {
   onToggleMode: () => void;
 }
 
+// TODO: ARREGLAR ERRORES DE TIPADO
+
 export function LoginForm({ onToggleMode }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -47,7 +49,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
             <Tooth className="h-8 w-8 text-white" />
           </div>
         </div>
-        <CardTitle className="text-2xl font-bold text-gray-900">
+        <CardTitle className="text-2xl font-bold text-gray-900 ">
           DentalCare Pro
         </CardTitle>
         <CardDescription className="text-gray-600">
