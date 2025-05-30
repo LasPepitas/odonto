@@ -1,16 +1,26 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
+import useAuthStore from "@/features/auth/store/useAuthStore";
+
 const PrivateRoutes = () => {
-  const isAuthenticated = false; // Replace with actual authentication logic
+  const { isAuthenticated } = useAuthStore();
   const isLoading = false; // Replace with actual loading state logic
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   if (!isAuthenticated) {
-    navigate("/login", { replace: true });
-    return <div>Redirecting to login...</div>;
+    return null; // Already redirected in useEffect
   }
+
   return (
     <Fragment>
       <Outlet />

@@ -22,6 +22,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Button } from "../ui/button";
+import useAuthStore from "@/features/auth/store/useAuthStore";
 
 export function NavUser({
   user,
@@ -33,6 +35,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const { logout } = useAuthStore();
 
   return (
     <SidebarMenu>
@@ -94,7 +97,14 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOutIcon />
-              Log out
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start"
+                onClick={() => logout()}
+              >
+                Cerrar sesión
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

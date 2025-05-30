@@ -4,6 +4,7 @@ import PublicRoutes from "./routes/PublicRoutes";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import { LoginForm } from "./features/auth/components/LoginForm";
 import { RegisterForm } from "./features/auth/components/RegisterForm";
+import { Toaster } from "./components/ui/sonner";
 function App() {
   return (
     <BrowserRouter>
@@ -26,6 +27,7 @@ function App() {
         </Route>
         <Route path="*" element={<PublicRoutes />} />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   );
 }

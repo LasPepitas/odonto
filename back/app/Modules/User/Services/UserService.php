@@ -8,7 +8,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Validator;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class UserService
 {
@@ -19,8 +23,12 @@ class UserService
 
     public function createUser(array $data): User
     {
-        $data['password'] = Hash::make($data['password']);
-        return User::create($data);
+        return User::create([
+            'email' => $data['email'],
+            'full_name' => $data['full_name'],
+            'password_hash' => bcrypt($data['password']),
+            'role' => $data['role']
+        ]);
     }
 
     public function updateUser(User $user, array $data): User
@@ -28,7 +36,7 @@ class UserService
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-        
+
         $user->update($data);
         return $user;
     }
@@ -40,31 +48,41 @@ class UserService
 
     public function login(array $credentials): array
     {
-        if (!Auth::attempt($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        // Debug: Verificar qué está recibiendo
+
+        // Buscar el usuario directamente
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user) {
+            throw new \Exception('Usuario no encontrado', 404);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('auth-token')->plainTextToken;
-
+        // Verificar contraseña manualmente
+        if (!\Hash::check($credentials['password'], $user->password_hash)) {
+            throw new \Exception('Credenciales incorrectas', 401);
+        }
+        $token = JWTAuth::fromUser($user);
+        if (!$token) {
+            throw new JWTException('No se pudo crear el token', 500);
+        }
         return [
             'user' => $user,
-            'token' => $token
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 3600 // Tiempo de expiración del token en segundos
         ];
     }
 
-    public function register(array $data): array
+    public function register(array $userData): array
     {
-        $user = $this->createUser($data);
-        $token = $user->createToken('auth-token')->plainTextToken;
-
+        $user = $this->createUser($userData);
+        $token = JWTAuth::fromUser($user);
         return [
             'user' => $user,
             'token' => $token
         ];
     }
+
 
     public function logout(): void
     {

@@ -11,17 +11,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SmileIcon as Tooth, Eye, EyeOff } from "lucide-react";
-
+import useAuthStore from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 interface LoginFormProps {
   onToggleMode: () => void;
 }
 
 export function LoginForm({ onToggleMode }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleLogin = () => {
-    // Simulate login and redirect to dashboard
-    window.location.href = "/dashboard";
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const { login, loading } = useAuthStore();
+  const handleLogin = async () => {
+    if (loading) return; // Evita múltiples clics si ya está cargando
+    if (!credentials.email || !credentials.password) {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+    await login({
+      email: credentials.email,
+      password: credentials.password,
+    });
+    // Redirige al usuario a la página de dashboard después de iniciar sesión
+    navigate("/dashboard");
   };
 
   return (
@@ -47,6 +62,10 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
             type="email"
             placeholder="doctor@clinica.com"
             className="w-full"
+            value={credentials.email}
+            onChange={(e) =>
+              setCredentials({ ...credentials, email: e.target.value })
+            }
           />
         </div>
         <div className="space-y-2">
@@ -57,6 +76,10 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               className="w-full pr-10"
+              value={credentials.password}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
             />
             <Button
               type="button"
@@ -79,13 +102,13 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
           onClick={handleLogin}
           className="w-full bg-blue-600 hover:bg-blue-700"
         >
-          Iniciar Sesión
+          {loading ? "Cargando..." : "Iniciar Sesión"}
         </Button>
         <div className="text-center text-sm text-gray-600">
           ¿No tienes cuenta?{" "}
           <button
-            onClick={onToggleMode}
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            onClick={() => navigate("/register")}
+            className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
           >
             Regístrate aquí
           </button>

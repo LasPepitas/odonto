@@ -7,6 +7,7 @@ use App\Modules\User\Models\User;
 use App\Modules\User\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -19,77 +20,43 @@ class UserController extends Controller
 
     public function login(Request $request): JsonResponse
     {
-        $validated = $request->validate([
+        // Validación
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|string'
+            'password' => 'required|string|min:6'
         ]);
 
-        $result = $this->userService->login($validated);
-        return response()->json($result);
-    }
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
+        $validated = $validator->validated();
+        $result = $this->userService->login($validated);
+        return response()->json($result, 200);
+    }
     public function register(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'username' => 'required|string|unique:users',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string'
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:user,email',
+            'full_name' => 'required|string|max:255',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:admin,receptionist,dentist'
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
+        $validated = $validator->validated();
         $result = $this->userService->register($validated);
         return response()->json($result, 201);
     }
 
-    public function logout(): JsonResponse
-    {
-        $this->userService->logout();
-        return response()->json(['message' => 'Logged out successfully']);
-    }
-
-    public function me(): JsonResponse
-    {
-        $user = $this->userService->getCurrentUser();
-        return response()->json($user);
-    }
-
-    public function forgotPassword(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'email' => 'required|email'
-        ]);
-
-        $this->userService->forgotPassword($validated['email']);
-        return response()->json(['message' => 'Password reset link sent']);
-    }
-
-    public function resetPassword(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed'
-        ]);
-
-        $this->userService->resetPassword($validated);
-        return response()->json(['message' => 'Password reset successfully']);
-    }
-
-    public function changePassword(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'current_password' => 'required|string',
-            'password' => 'required|string|min:6|confirmed'
-        ]);
-
-        $this->userService->changePassword(
-            $request->user(),
-            $validated['current_password'],
-            $validated['password']
-        );
-
-        return response()->json(['message' => 'Password changed successfully']);
-    }
 
     public function index(): JsonResponse
     {

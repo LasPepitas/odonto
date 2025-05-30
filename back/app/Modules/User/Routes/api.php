@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\JwtAuthenticate;
 use App\Modules\User\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,19 +14,20 @@ Route::prefix('auth')->group(function () {
     // check health endpoint
     Route::get('health', fn() => response()->json(['status' => 'ok']));
 
-    // Rutas protegidas por auth
-    Route::middleware('auth:sanctum')->group(function () {
+    // Rutas protegidas por JWT
+    Route::middleware('auth:api')->group(function () {
         Route::post('logout', [UserController::class, 'logout']);
         Route::get('me', [UserController::class, 'me']);
         Route::post('change-password', [UserController::class, 'changePassword']);
     });
 });
 
-// CRUD de usuarios, también protegido
-Route::middleware('auth:sanctum')->prefix('users')->group(function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::post('/', [UserController::class, 'store']);
-    Route::get('/{user}', [UserController::class, 'show']);
-    Route::put('/{user}', [UserController::class, 'update']);
-    Route::delete('/{user}', [UserController::class, 'destroy']);
-});
+// CRUD de usuarios, protegido por JWT
+Route::middleware([JwtAuthenticate::class . ':api'])->
+    prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::get('/{user}', [UserController::class, 'show']);
+        Route::put('/{user}', [UserController::class, 'update']);
+        Route::delete('/{user}', [UserController::class, 'destroy']);
+    });
