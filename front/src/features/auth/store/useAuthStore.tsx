@@ -2,18 +2,24 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { login, register } from "../services";
 import { toast } from "sonner";
-
+import type { Credentials, UserRequestRegister } from "../interfaces";
 const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
       isAuthenticated: false,
       loading: false,
-      login: async (credentials) => {
+      token: null,
+      login: async (credentials: Credentials) => {
         set({ loading: true });
         try {
-          const user = await login(credentials);
-          set({ user, isAuthenticated: true, loading: false });
+          const { user, access_token } = await login(credentials);
+          set({
+            user,
+            token: access_token,
+            isAuthenticated: true,
+            loading: false,
+          });
           toast.success("Iniciando sesión correctamente");
         } catch (error) {
           console.error("Error de autenticación:", error);
@@ -24,7 +30,7 @@ const useAuthStore = create(
           throw error;
         }
       },
-      register: async (userData) => {
+      register: async (userData: UserRequestRegister) => {
         set({ loading: true });
         try {
           const user = await register(userData);

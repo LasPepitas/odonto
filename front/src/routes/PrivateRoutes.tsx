@@ -1,6 +1,7 @@
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import useAuthStore from "@/features/auth/store/useAuthStore";
+import SidebarLayout from "@/components/layout/Sidebar";
 
 const PrivateRoutes = () => {
   const { isAuthenticated } = useAuthStore();
@@ -22,9 +23,9 @@ const PrivateRoutes = () => {
   }
 
   return (
-    <Fragment>
+    <SidebarLayout>
       <Outlet />
-    </Fragment>
+    </SidebarLayout>
   );
 };
 

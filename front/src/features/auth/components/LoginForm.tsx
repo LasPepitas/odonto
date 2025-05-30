@@ -11,8 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SmileIcon as Tooth, Eye, EyeOff } from "lucide-react";
-import useAuthStore from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/useAuthStore";
 interface LoginFormProps {
   onToggleMode: () => void;
 }
