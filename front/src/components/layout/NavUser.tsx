@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
 import useAuthStore from "@/features/auth/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({
   user,
@@ -36,7 +37,12 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const { logout } = useAuthStore();
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>

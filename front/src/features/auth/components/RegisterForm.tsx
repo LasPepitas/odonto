@@ -51,7 +51,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
   };
   console.log("RegisterForm credentials:", credentials);
   return (
-    <Card className="w-full shadow-xl">
+    <Card className="w-full shadow-xl max-w-md mx-auto mt-10">
       <CardHeader className="space-y-1 text-center">
         <div className="flex items-center justify-center mb-4">
           <div className="bg-blue-600 p-3 rounded-full">
