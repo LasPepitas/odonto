@@ -1,7 +1,7 @@
 -- -----------------------------
 -- 1. Tabla de Usuarios
 -- -----------------------------
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS user (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
   full_name VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE user (
 -- -----------------------------
 -- 2. Tabla de Dentistas (vinculados a user)
 -- -----------------------------
-CREATE TABLE dentist (
+CREATE TABLE IF NOT EXISTS dentist (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL UNIQUE,
   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
@@ -22,7 +22,7 @@ CREATE TABLE dentist (
 -- -----------------------------
 -- 3. Tabla de Pacientes
 -- -----------------------------
-CREATE TABLE patient (
+CREATE TABLE IF NOT EXISTS patient (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(255) NOT NULL,
   dni VARCHAR(20) NOT NULL UNIQUE,
@@ -34,7 +34,7 @@ CREATE TABLE patient (
 -- -----------------------------
 -- 4. Catálogo de Tratamientos
 -- -----------------------------
-CREATE TABLE treatment (
+CREATE TABLE IF NOT EXISTS treatment (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE treatment (
 -- -----------------------------
 -- 5. Citas
 -- -----------------------------
-CREATE TABLE appointment (
+CREATE TABLE IF NOT EXISTS appointment (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   patient_id INT UNSIGNED NOT NULL,
   dentist_id INT UNSIGNED NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE appointment (
 -- -----------------------------
 -- 6. Pagos
 -- -----------------------------
-CREATE TABLE payment (
+CREATE TABLE IF NOT EXISTS payment (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   appointment_id INT UNSIGNED NOT NULL,
   amount DECIMAL(10,2) NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE payment (
 -- -----------------------------
 -- 7. Inventario
 -- -----------------------------
-CREATE TABLE inventory (
+CREATE TABLE IF NOT EXISTS inventory (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   material_name VARCHAR(255) NOT NULL,
   quantity INT NOT NULL DEFAULT 0,

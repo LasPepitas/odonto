@@ -1,4 +1,4 @@
-import UserTable from "./userTable";
+import UserTable from "./UserTable";
 const UsersPage = () => {
   return (
     <div>

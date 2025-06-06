@@ -1,0 +1,25 @@
+FROM php:8.2-apache
+
+# Instala extensiones necesarias de PHP
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip \
+    && docker-php-ext-install pdo pdo_mysql zip
+
+# Habilita mod_rewrite para Laravel
+RUN a2enmod rewrite
+
+# Establece el directorio de trabajo
+WORKDIR /var/www/html
+
+# Copia el código fuente
+COPY ./back /var/www/html
+
+# Cambia el DocumentRoot a public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+
+# Permisos (opcional)
+RUN chown -R www-data:www-data /var/www/html
+
+EXPOSE 80
