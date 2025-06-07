@@ -101,5 +101,10 @@ Puedes consultar documentación adicional dentro del directorio `docs/`.
 
 ## 📄 Licencia
 
-Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Este proyecto está licenciado bajo los términos de la
+**GNU Affero General Public License v3.0 (AGPL-3.0).**
+© 2025 VICTOR RAUL MAYE MAMANI
+
+Consulta el archivo LICENSE para más detalles, o visita
+https://www.gnu.org/licenses/agpl-3.0.html.
 
