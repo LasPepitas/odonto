@@ -22,6 +22,9 @@ Route::group([], function () {
 
 // TODO: RUTAS PARA TRATAMIENTOS
 // TODO: RUTAS PARA PACIENTES
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Patient/Routes/Patient.php';
+});
 // TODO: RUTAS PARA CITA
 // TODO: RUTAS PARA HISTORIAL CLÍNICO
 // TODO: RUTAS PARA FACTURACIÓN
