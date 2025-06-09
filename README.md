@@ -47,7 +47,7 @@ docker-compose up --build
 
 Esto iniciará:
 
-* React app en `http://localhost:3000`
+* React app en `http://localhost:5173`
 * Laravel backend en `http://localhost:8000`
 * Base de datos MySQL en `localhost:3306`
 
