@@ -4,7 +4,7 @@ namespace App\Modules\Patient\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class
+class Treatment extends Model
 {
     // Nombre de la tabla (opcional si sigue la convención plural: patients)
     protected $table = 'treatment';
