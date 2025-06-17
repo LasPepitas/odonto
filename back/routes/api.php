@@ -21,9 +21,17 @@ Route::group([], function () {
 });
 
 // TODO: RUTAS PARA TRATAMIENTOS
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Treatment/Routes/Treatment.php';
+});
 // TODO: RUTAS PARA PACIENTES
 Route::group([], function () {
     require __DIR__ . '/../app/Modules/Patient/Routes/Patient.php';
+});
+
+//TODO: RUTAS PARA DENTISTAS
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Dentist/Routes/Dentist.php';
 });
 // TODO: RUTAS PARA CITA
 // TODO: RUTAS PARA HISTORIAL CLÍNICO

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Treatment\Models;
+namespace App\Modules\Dentist\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Treatment extends Model
+class Dentist extends Model
 {
-    // Nombre de la tabla (asumiendo que es 'services' basado en la estructura)
-    protected $table = 'treatment';
+    // Nombre de la tabla (opcional si sigue la convención plural: users)
+    protected $table = 'dentist';
 
     // Clave primaria (opcional si es "id")
     protected $primaryKey = 'id';
@@ -17,13 +17,11 @@ class Treatment extends Model
 
     // Campos que pueden ser asignados masivamente
     protected $fillable = [
-        'name',
-        'description',
-        'cost',
+        'user_id',
     ];
 
     // Opcional: especificar tipos de campos para casting automático
     protected $casts = [
-        'cost' => 'decimal:2',
+        'user_id' => 'integer',
     ];
 }
