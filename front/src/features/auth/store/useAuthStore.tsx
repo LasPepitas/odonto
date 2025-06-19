@@ -34,7 +34,12 @@ const useAuthStore = create(
         set({ loading: true });
         try {
           const user = await register(userData);
-          set({ user, isAuthenticated: true, loading: false });
+          set({
+            user,
+            token: user.access_token,
+            isAuthenticated: true,
+            loading: false,
+          });
           toast.success("Registro exitoso, iniciando sesión");
         } catch (error) {
           console.error("Error de registro:", error);

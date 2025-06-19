@@ -13,20 +13,21 @@ import {
 import { SmileIcon as Tooth, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
-interface LoginFormProps {
-  onToggleMode: () => void;
-}
+import type { AuthStore } from "../interfaces";
+// interface LoginFormProps {
+//   onToggleMode: () => void;
+// }
 
 // TODO: ARREGLAR ERRORES DE TIPADO
 
-export function LoginForm({ onToggleMode }: LoginFormProps) {
+export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
   const navigate = useNavigate();
-  const { login, loading } = useAuthStore();
+  const { login, loading } = useAuthStore() as AuthStore;
   const handleLogin = async () => {
     if (loading) return; // Evita múltiples clics si ya está cargando
     if (!credentials.email || !credentials.password) {
@@ -66,7 +67,10 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
             className="w-full"
             value={credentials.email}
             onChange={(e) =>
-              setCredentials({ ...credentials, email: e.target.value })
+              setCredentials({
+                ...credentials,
+                email: e.target.value.toLowerCase(),
+              })
             }
           />
         </div>

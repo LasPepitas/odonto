@@ -20,13 +20,14 @@ import { SmileIcon as Tooth } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useAuthStore from "../store/useAuthStore";
+import type { AuthStore, UserRole } from "../interfaces";
 
-interface RegisterFormProps {
-  onToggleMode: () => void;
-}
+// interface RegisterFormProps {
+//   onToggleMode: () => void;
+// }
 
-export function RegisterForm({ onToggleMode }: RegisterFormProps) {
-  const { register, loading } = useAuthStore();
+export function RegisterForm() {
+  const { register, loading } = useAuthStore() as AuthStore;
   const [credentials, setCredentials] = useState({
     full_name: "",
     email: "",
@@ -44,7 +45,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
       full_name: credentials.full_name,
       email: credentials.email,
       password: credentials.password,
-      role: credentials.role,
+      role: credentials.role as UserRole,
     });
     // Redirige al usuario a la página de dashboard después de registrarse
     navigate("/dashboard");
@@ -85,15 +86,19 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
             type="email"
             placeholder="doctor@clinica.com"
             onChange={(e) =>
-              setCredentials({ ...credentials, email: e.target.value })
+              setCredentials({
+                ...credentials,
+                email: e.target.value.toLowerCase(),
+              })
             }
+            value={credentials.email}
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="role">Rol</Label>
           <Select
             value={credentials.role}
-            onValueChange={(value) =>
+            onValueChange={(value: UserRole) =>
               setCredentials({ ...credentials, role: value })
             }
           >

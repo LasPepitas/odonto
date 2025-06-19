@@ -24,7 +24,7 @@ class UserService
     public function createUser(array $data): User
     {
         return User::create([
-            'email' => $data['email'],
+            'email' => strtolower($data['email']),
             'full_name' => $data['full_name'],
             'password_hash' => bcrypt($data['password']),
             'role' => $data['role']
@@ -79,7 +79,7 @@ class UserService
         $token = JWTAuth::fromUser($user);
         return [
             'user' => $user,
-            'token' => $token
+            'access_token' => $token
         ];
     }
 
