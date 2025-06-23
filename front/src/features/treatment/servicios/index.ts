@@ -20,3 +20,13 @@ export const createTreatment = async (data: Treatment) => {
     throw error;
   }
 };
+
+export const updateTreatment = async (id: number, data: Treatment) => {
+  try {
+    const response = await apiClient.put(`/treatments/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating servicio:", error);
+    throw error;
+  }
+};

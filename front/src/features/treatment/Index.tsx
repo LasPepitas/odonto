@@ -3,11 +3,13 @@ import TableTreatments from "./components/TableTreatments";
 import ModalAdd from "./components/ModalAdd";
 import { Card } from "@/components/ui/card";
 import useTreatments from "./hooks/useTreatments";
+import ModalEdit from "./components/ModalEdit";
 const TreatmentsPage = () => {
   const [isOpenModalAdd, setIsOpenModalAdd] = useState(false);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<any>(null);
-  const { treatments, addTreatment, isLoading } = useTreatments();
+  const { treatments, addTreatment, updateTreatment, isLoading } =
+    useTreatments();
   return (
     <div className="space-y-1">
       <Card className="flex flex-row items-center justify-between p-4 bg-white shadow-sm">
@@ -31,13 +33,20 @@ const TreatmentsPage = () => {
       <TableTreatments
         treatments={treatments}
         isLoading={isLoading}
-        // setIsOpenModalEdit={setIsOpenModalEdit}
-        // setSelectedTreatment={setSelectedTreatment}
+        setIsOpenModalEdit={setIsOpenModalEdit}
+        setSelectedTreatment={setSelectedTreatment}
       />
       <ModalAdd
         isOpenModalAdd={isOpenModalAdd}
         setIsOpenModalAdd={setIsOpenModalAdd}
         addTreatment={addTreatment}
+        isLoading={isLoading}
+      />
+      <ModalEdit
+        isOpen={isOpenModalEdit}
+        setIsOpen={setIsOpenModalEdit}
+        selectedTreatment={selectedTreatment}
+        updateTreatment={updateTreatment}
         isLoading={isLoading}
       />
     </div>

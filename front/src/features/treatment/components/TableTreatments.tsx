@@ -16,9 +16,13 @@ import type { Treatment } from "../interfaces";
 const TableTreatments = ({
   treatments,
   isLoading,
+  setIsOpenModalEdit,
+  setSelectedTreatment,
 }: {
   treatments: Treatment[];
   isLoading: boolean;
+  setIsOpenModalEdit: (open: boolean) => void;
+  setSelectedTreatment: (treatment: Treatment | null) => void;
 }) => {
   return (
     <Card>
@@ -51,7 +55,14 @@ const TableTreatments = ({
                     >
                       <Eye className="size-4" />
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsOpenModalEdit(true);
+                        setSelectedTreatment(treatment);
+                      }}
+                    >
                       <Edit className="size-4" />
                     </Button>
                   </div>
