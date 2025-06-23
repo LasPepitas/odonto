@@ -15,7 +15,8 @@ Route::prefix('auth')->group(function () {
     Route::get('health', fn() => response()->json(['status' => 'ok']));
 
     // Rutas protegidas por JWT
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware([JwtAuthenticate::class . ':api'])->group(function () {
+        Route::get('profile', action: [UserController::class, 'profile']);
         Route::post('logout', [UserController::class, 'logout']);
         Route::get('me', [UserController::class, 'me']);
         Route::post('change-password', [UserController::class, 'changePassword']);

@@ -8,6 +8,7 @@ use App\Modules\User\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\ErrorHandler\Debug;
 
 class UserController extends Controller
 {
@@ -56,7 +57,16 @@ class UserController extends Controller
         $result = $this->userService->register($validated);
         return response()->json($result, 201);
     }
-
+    public function profile(): JsonResponse
+    {
+        $user = auth()->user();
+        // debug logs
+        \Log::debug('User profile accessed', ['user' => $user]);
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        return response()->json($user);
+    }
 
     public function index(): JsonResponse
     {

@@ -83,6 +83,16 @@ class UserService
         ];
     }
 
+    public function getAuthenticatedUser($token): ?User
+    {
+        try {
+            $user = JWTAuth::authenticate($token);
+            return $user;
+        } catch (JWTException $e) {
+            // Manejar el error de token inválido o expirado
+            return null;
+        }
+    }
 
     public function logout(): void
     {
