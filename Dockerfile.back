@@ -29,4 +29,4 @@ RUN chown -R www-data:www-data /var/www/html \
 # Ejecuta composer install
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-EXPOSE 80
+EXPOSE 8081
