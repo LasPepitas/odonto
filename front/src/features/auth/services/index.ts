@@ -14,3 +14,8 @@ export const register = async (userData: UserRequestRegister) => {
   const response = await apiClient.post("/auth/register", userData);
   return response.data;
 };
+
+export const profile = async () => {
+  const response = await apiClient.get("/auth/profile");
+  return response.data;
+};
