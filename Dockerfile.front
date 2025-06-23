@@ -1,13 +1,33 @@
-FROM node:18
+# Etapa 1: Build
+FROM node:18 AS builder
 
 WORKDIR /app
 
+# Copia package.json y package-lock.json para aprovechar cache
 COPY front/package*.json ./
 
+# Instala dependencias
 RUN npm install
 
-COPY front/ .
+# Recompila esbuild para el entorno actual
+RUN npm rebuild esbuild
 
-EXPOSE 5173
+# Copia todo el código
+COPY front/ ./
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+# Ejecuta el build de producción
+RUN npm run build
+
+# Etapa 2: Producción
+FROM node:18-slim
+
+WORKDIR /app
+
+RUN npm install -g serve
+
+# Copia solo archivos necesarios del build
+COPY --from=builder /app/dist /app/dist
+
+EXPOSE 4173
+
+CMD ["serve", "-s", "dist", "-l", "4173"]
