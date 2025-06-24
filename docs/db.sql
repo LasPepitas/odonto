@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS odonto;
+CREATE USER IF NOT EXISTS 'developer'@'%' IDENTIFIED BY '124217';
+GRANT ALL PRIVILEGES ON odonto.* TO 'developer'@'%';
+FLUSH PRIVILEGES;
 -- -----------------------------
 -- 1. Tabla de Usuarios
 -- -----------------------------

@@ -1,3 +1,6 @@
 /front/node_modules
 /back/vendor
 mysql_data/
+.env.prod
+.env.back.prod
+.env.front.prod
