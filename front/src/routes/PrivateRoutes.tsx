@@ -16,7 +16,7 @@ const PrivateRoutes = () => {
       }
     };
     verifyAuth();
-  }, [token, checkAuth, navigate]);
+  }, [token, checkAuth]);
   if (loading) {
     return <LoadingPage />;
   }
