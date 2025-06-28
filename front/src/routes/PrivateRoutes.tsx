@@ -2,22 +2,23 @@ import { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import useAuthStore from "@/features/auth/store/useAuthStore";
 import SidebarLayout from "@/components/layout/Sidebar";
+import LoadingPage from "@/components/common/LoaderPage/LoadingPage";
 const PrivateRoutes = () => {
   const { token, isAuthenticated, loading, checkAuth } = useAuthStore();
   const navigate = useNavigate();
   useEffect(() => {
     const verifyAuth = async () => {
-      if (!token && !isAuthenticated) {
+      if (!token || !isAuthenticated) {
         navigate("/login");
       }
-      if (token && !isAuthenticated) {
+      if (token) {
         await checkAuth();
       }
     };
     verifyAuth();
   }, [token, checkAuth, navigate]);
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
   if (!isAuthenticated) {
     navigate("/login");
