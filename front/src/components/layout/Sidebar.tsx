@@ -9,7 +9,7 @@ export default function SidebarLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="bg-blue-100 w-full">
+      <main className="bg-slate-100 w-full">
         <SidebarTrigger className="cursor-pointer" />
         <section className="px-5">{children}</section>
       </main>

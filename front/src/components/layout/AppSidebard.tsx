@@ -20,6 +20,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./NavUser";
+import { Link } from "react-router-dom";
+import useAuthStore from "@/features/auth/store/useAuthStore";
 
 // Menú para sistema odontológico.
 const items = [
@@ -67,6 +69,8 @@ const data = {
   },
 };
 export function AppSidebar() {
+  const { user } = useAuthStore();
+  console.log("AppSidebar user", user);
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -82,13 +86,13 @@ export function AppSidebar() {
                     asChild
                     isActive={window.location.pathname === item.url}
                   >
-                    <a
-                      href={item.url}
+                    <Link
+                      to={item.url}
                       className="flex items-center space-x-2 text-black hover:!bg-blue-600 hover:text-white font-bold p-2 rounded transition-colors duration-200"
                     >
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -97,7 +101,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

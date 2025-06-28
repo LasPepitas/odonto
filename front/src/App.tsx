@@ -7,6 +7,7 @@ import { Toaster } from "./components/ui/sonner";
 import UsersPage from "./features/users/UsersPage";
 import StatsPage from "./features/Stats/StatsPage";
 import TreatmentsPage from "./features/treatment/Index";
+import PatientsPage from "./features/patients/Index";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard/*" element={<StatsPage />} />
           <Route path="/dashboard/usuarios" element={<UsersPage />} />
           <Route path="/dashboard/tratamientos" element={<TreatmentsPage />} />
+          <Route path="/dashboard/pacientes" element={<PatientsPage />} />
         </Route>
         <Route path="*" element={<PublicRoutes />} />
       </Routes>
