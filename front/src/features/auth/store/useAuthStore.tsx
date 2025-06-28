@@ -15,7 +15,7 @@ const useAuthStore = create(
         try {
           const { user, access_token } = await login(credentials);
           set({
-            user,
+            user: user,
             token: access_token,
             isAuthenticated: true,
             loading: false,
