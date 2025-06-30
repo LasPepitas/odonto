@@ -58,50 +58,52 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Correo electrónico</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="doctor@clinica.com"
-            className="w-full"
-            value={credentials.email}
-            onChange={(e) =>
-              setCredentials({
-                ...credentials,
-                email: e.target.value.toLowerCase(),
-              })
-            }
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Contraseña</Label>
-          <div className="relative">
+        <form>
+          <div className="space-y-2">
+            <Label htmlFor="email">Correo electrónico</Label>
             <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              className="w-full pr-10"
-              value={credentials.password}
+              id="email"
+              type="email"
+              placeholder="doctor@clinica.com"
+              className="w-full"
+              value={credentials.email}
               onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
+                setCredentials({
+                  ...credentials,
+                  email: e.target.value.toLowerCase(),
+                })
               }
             />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <EyeOff className="h-4 w-4 text-gray-400" />
-              ) : (
-                <Eye className="h-4 w-4 text-gray-400" />
-              )}
-            </Button>
           </div>
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Contraseña</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="w-full pr-10"
+                value={credentials.password}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, password: e.target.value })
+                }
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-400" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-400" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         <Button

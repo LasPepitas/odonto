@@ -11,13 +11,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { useState } from "react";
+import type { Patient } from "../interfaces";
 const ModalAddPatient = ({
   isDialogOpen,
   setIsDialogOpen,
+  addPatient,
+  isLoading,
 }: {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
+  addPatient?: (patient: Patient) => Promise<void>;
+  isLoading?: boolean;
 }) => {
+  const [newPatient, setNewPatient] = useState({
+    full_name: "",
+    dni: "",
+    phone: "",
+    address: "",
+    birth_date: new Date().toISOString().split("T")[0],
+  });
+  const handleAddPatient = async () => {
+    try {
+      await addPatient(newPatient);
+      setIsDialogOpen(false);
+      setNewPatient({
+        full_name: "",
+        dni: "",
+        phone: "",
+        address: "",
+        birth_date: new Date().toISOString().split("T")[0],
+      });
+    } catch (error) {
+      console.error("Error adding patient:", error);
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setNewPatient((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -35,45 +70,59 @@ const ModalAddPatient = ({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="full_name" className="text-right">
               Nombre
             </Label>
-            <Input id="name" className="col-span-3" />
+            <Input
+              id="full_name"
+              className="col-span-3"
+              onChange={handleChange}
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="dni" className="text-right">
               DNI
             </Label>
-            <Input id="dni" className="col-span-3" />
+            <Input id="dni" className="col-span-3" onChange={handleChange} />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="phone" className="text-right">
               Teléfono
             </Label>
-            <Input id="phone" className="col-span-3" />
+            <Input id="phone" className="col-span-3" onChange={handleChange} />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          {/* <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="text-right">
               Email
             </Label>
             <Input id="email" type="email" className="col-span-3" />
-          </div>
+          </div> */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="address" className="text-right">
               Dirección
             </Label>
-            <Input id="address" className="col-span-3" />
+            <Input
+              id="address"
+              className="col-span-3"
+              onChange={handleChange}
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="age" className="text-right">
-              Edad
+            <Label htmlFor="birth_date" className="text-right">
+              Fecha de Nacimiento
             </Label>
-            <Input id="age" type="number" className="col-span-3" />
+            <Input
+              id="birth_date"
+              type="date"
+              className="col-span-3"
+              defaultValue={new Date().toISOString().split("T")[0]}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => setIsDialogOpen(false)}>
-            Guardar Paciente
+          <Button type="submit" onClick={handleAddPatient}>
+            {isLoading ? "Guardando..." : "Guardar"}
           </Button>
         </DialogFooter>
       </DialogContent>

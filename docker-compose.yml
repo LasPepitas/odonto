@@ -26,6 +26,8 @@ services:
     restart: always
     depends_on:
       - mysql
+    environment:
+      - DB_HOST=mysql
     ports:
       - "8082:80"
     networks:
@@ -37,6 +39,8 @@ services:
       dockerfile: Dockerfile.front
     container_name: react
     restart: always
+    environment:
+      - VITE_API_URL=http:http://backend:8082/api
     ports:
       - "4173:4173"
     stdin_open: true
