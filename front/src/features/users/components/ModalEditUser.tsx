@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FC } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,20 +11,32 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { UserPayload } from "../interfaces";
+import type { User } from "../interfaces";
 
-interface ModalAddUserProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  isLoading: boolean;
-  addUser: (user: UserPayload) => Promise<void>;
+// Payload para editar (sin id ni created_at)
+interface UserPayload {
+  email: string;
+  full_name: string;
+  role: string;
 }
 
-const ModalAddUser: FC<ModalAddUserProps> = ({
+// Props del modal
+interface ModalEditUserProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  selectedUser: User | null;
+  isLoading: boolean;
+  setSelectedUser: (user: User | null) => void;
+  updateUserById: (id: number, user: UserPayload) => Promise<void>;
+}
+
+const ModalEditUser: FC<ModalEditUserProps> = ({
   isOpen,
   setIsOpen,
+  selectedUser,
   isLoading,
-  addUser,
+  setSelectedUser,
+  updateUserById,
 }) => {
   const [formData, setFormData] = useState<UserPayload>({
     full_name: "",
@@ -32,34 +44,45 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
     role: "",
   });
 
+  // Actualiza el formulario al seleccionar usuario
+  useEffect(() => {
+    if (selectedUser) {
+      setFormData({
+        full_name: selectedUser.full_name,
+        email: selectedUser.email,
+        role: selectedUser.role,
+      });
+    }
+  }, [selectedUser]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async () => {
-    if (!formData.full_name || !formData.email || !formData.role) return;
-
-    try {
-      await addUser(formData);
-      setFormData({ full_name: "", email: "", role: "" });
-      setIsOpen(false);
-    } catch (err) {
-      console.error("Error al agregar usuario:", err);
-    }
   };
 
   const handleCancel = () => {
     setFormData({ full_name: "", email: "", role: "" });
     setIsOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleUpdate = async () => {
+    if (!selectedUser) return;
+    try {
+      await updateUserById(selectedUser.id, formData);
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+    } finally {
+      handleCancel();
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Agregar Usuario</DialogTitle>
+          <DialogTitle>Editar Usuario</DialogTitle>
           <DialogDescription>
-            Ingresa los datos del nuevo usuario para añadirlo al sistema.
+            Modifica los datos del usuario seleccionado.
           </DialogDescription>
         </DialogHeader>
 
@@ -103,8 +126,8 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
           <Button variant="outline" onClick={handleCancel} disabled={isLoading}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? "Guardando..." : "Agregar"}
+          <Button onClick={handleUpdate} disabled={isLoading}>
+            {isLoading ? "Guardando..." : "Guardar Cambios"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -112,4 +135,4 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
   );
 };
 
-export default ModalAddUser;
+export default ModalEditUser;

@@ -1,7 +1,5 @@
-import React from "react";
-
 const Index = () => {
-  return <div>Index</div>;
+  return <div>citas</div>;
 };
 
 export default Index;
