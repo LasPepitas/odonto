@@ -5,7 +5,7 @@ import { LoginForm } from "./features/auth/components/LoginForm";
 import { RegisterForm } from "./features/auth/components/RegisterForm";
 import { Toaster } from "./components/ui/sonner";
 import UsersPage from "./features/users/UsersPage";
-import StatsPage from "./features/Stats/StatsPage";
+import { StatsPage } from "./features/Stats/StatsPage";
 import TreatmentsPage from "./features/treatment/Index";
 import PatientsPage from "./features/patients/Index";
 function App() {
