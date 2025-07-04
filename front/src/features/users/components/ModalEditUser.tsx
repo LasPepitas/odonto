@@ -11,23 +11,22 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { User } from "../interfaces";
+import type { User, UserPayloadWithPassword } from "../interfaces";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// Payload para editar (sin id ni created_at)
-interface UserPayload {
-  email: string;
-  full_name: string;
-  role: string;
-}
-
-// Props del modal
 interface ModalEditUserProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   selectedUser: User | null;
   isLoading: boolean;
   setSelectedUser: (user: User | null) => void;
-  updateUserById: (id: number, user: UserPayload) => Promise<void>;
+  updateUserById: (id: number, user: UserPayloadWithPassword) => Promise<void>;
 }
 
 const ModalEditUser: FC<ModalEditUserProps> = ({
@@ -38,10 +37,11 @@ const ModalEditUser: FC<ModalEditUserProps> = ({
   setSelectedUser,
   updateUserById,
 }) => {
-  const [formData, setFormData] = useState<UserPayload>({
+  const [formData, setFormData] = useState<UserPayloadWithPassword>({
     full_name: "",
     email: "",
     role: "",
+    password: "",
   });
 
   // Actualiza el formulario al seleccionar usuario
@@ -51,6 +51,7 @@ const ModalEditUser: FC<ModalEditUserProps> = ({
         full_name: selectedUser.full_name,
         email: selectedUser.email,
         role: selectedUser.role,
+        password: "", // No se debe mostrar la contraseña
       });
     }
   }, [selectedUser]);
@@ -60,7 +61,7 @@ const ModalEditUser: FC<ModalEditUserProps> = ({
   };
 
   const handleCancel = () => {
-    setFormData({ full_name: "", email: "", role: "" });
+    setFormData({ full_name: "", email: "", role: "", password: "" });
     setIsOpen(false);
     setSelectedUser(null);
   };
@@ -112,16 +113,37 @@ const ModalEditUser: FC<ModalEditUserProps> = ({
 
           <div>
             <Label htmlFor="role">Rol</Label>
-            <Input
-              id="role"
-              name="role"
+            <Select
               value={formData.role}
-              onChange={handleChange}
-              placeholder="admin, user, etc."
-            />
+              onValueChange={(value: string) =>
+                setFormData({ ...formData, role: value })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecciona un rol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="dentist">Dentista</SelectItem>
+                <SelectItem value="receptionist">Recepcionista</SelectItem>
+                <SelectItem value="admin">Administrador</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-
+        <DialogDescription className="text-sm text-gray-500">
+          Deja el campo de contraseña vacío si no deseas cambiarla.
+        </DialogDescription>
+        <div>
+          <Label htmlFor="password">Contraseña</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Nueva contraseña (opcional)"
+          />
+        </div>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={isLoading}>
             Cancelar

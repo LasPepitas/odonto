@@ -33,8 +33,9 @@ class UserService
 
     public function updateUser(User $user, array $data): User
     {
+
         if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+            $data['password_hash'] = Hash::make($data['password']);
         }
 
         $user->update($data);

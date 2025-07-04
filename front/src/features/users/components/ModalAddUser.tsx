@@ -11,7 +11,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { UserPayload } from "../interfaces";
+import type { UserPayload, UserPayloadWithPassword } from "../interfaces";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ModalAddUserProps {
   isOpen: boolean;
@@ -26,10 +33,11 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
   isLoading,
   addUser,
 }) => {
-  const [formData, setFormData] = useState<UserPayload>({
+  const [formData, setFormData] = useState<UserPayloadWithPassword>({
     full_name: "",
     email: "",
     role: "",
+    password: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +49,7 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
 
     try {
       await addUser(formData);
-      setFormData({ full_name: "", email: "", role: "" });
+      setFormData({ full_name: "", email: "", role: "", password: "" });
       setIsOpen(false);
     } catch (err) {
       console.error("Error al agregar usuario:", err);
@@ -49,7 +57,7 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
   };
 
   const handleCancel = () => {
-    setFormData({ full_name: "", email: "", role: "" });
+    setFormData({ full_name: "", email: "", role: "", password: "" });
     setIsOpen(false);
   };
 
@@ -89,14 +97,33 @@ const ModalAddUser: FC<ModalAddUserProps> = ({
 
           <div>
             <Label htmlFor="role">Rol</Label>
-            <Input
-              id="role"
-              name="role"
+            <Select
               value={formData.role}
-              onChange={handleChange}
-              placeholder="admin, user, etc."
-            />
+              onValueChange={(value: string) =>
+                setFormData({ ...formData, role: value })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecciona un rol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="dentist">Dentista</SelectItem>
+                <SelectItem value="receptionist">Recepcionista</SelectItem>
+                <SelectItem value="admin">Administrador</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
+        <div>
+          <Label htmlFor="password">Contraseña</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="********"
+          />
         </div>
 
         <DialogFooter>
