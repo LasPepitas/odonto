@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -8,22 +7,38 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Eye } from "lucide-react";
+import { Edit, Loader2, Trash2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import useTreatments from "../hooks/useTreatments";
 import type { Treatment } from "../interfaces";
 
 const TableTreatments = ({
   treatments,
   isLoading,
   setIsOpenModalEdit,
+  setIsOpenModalDelete,
   setSelectedTreatment,
 }: {
   treatments: Treatment[];
   isLoading: boolean;
   setIsOpenModalEdit: (open: boolean) => void;
+  setIsOpenModalDelete: (open: boolean) => void;
   setSelectedTreatment: (treatment: Treatment | null) => void;
 }) => {
+  if (isLoading) {
+    return (
+      <Card className="flex items-center justify-center h-64">
+        <CardContent className="flex flex-col items-center justify-center">
+          <Loader2 className="ml-2 animate-spin size-10 text-gray-500" />
+          <div className="text-gray-500">Cargando tratamientos...</div>
+        </CardContent>
+      </Card>
+    );
+  }
+  const handleDelete = (treatmentId: number) => {
+    setIsOpenModalDelete(true);
+    setSelectedTreatment(treatments.find((t) => t.id === treatmentId) || null);
+  };
+
   return (
     <Card>
       <CardContent>
@@ -51,9 +66,9 @@ const TableTreatments = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      //   onClick={() => handleViewDetails(treatment)}
+                      onClick={() => handleDelete(treatment.id)}
                     >
-                      <Eye className="size-4" />
+                      <Trash2 className="size-4" />
                     </Button>
                     <Button
                       variant="outline"

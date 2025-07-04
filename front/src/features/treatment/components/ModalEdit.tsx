@@ -16,13 +16,13 @@ const ModalEdit = ({
   isOpen,
   setIsOpen,
   selectedTreatment,
-  updateTreatment,
+  updateTreatmentById,
   isLoading,
 }: {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   selectedTreatment: Treatment | null;
-  updateTreatment: (treatment: Treatment) => Promise<void>;
+  updateTreatmentById: (treatment: Treatment) => Promise<void>;
   isLoading: boolean;
 }) => {
   const [treatment, setTreatment] = useState<Treatment>({
@@ -40,7 +40,7 @@ const ModalEdit = ({
 
   const handleUpdate = async () => {
     try {
-      await updateTreatment(treatment);
+      await updateTreatmentById(treatment);
       setIsOpen(false);
     } catch (error) {
       console.error("Error updating treatment:", error);

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { createTreatment, getTreatments, updateTreatment } from "../servicios";
+import {
+  createTreatment,
+  getTreatments,
+  updateTreatment,
+  deleteTreatment,
+} from "../servicios";
 import type { Treatment } from "../interfaces";
 const useTreatments = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +38,7 @@ const useTreatments = () => {
     }
   };
 
-  const updateTreatment = async (treatment: Treatment) => {
+  const updateTreatmentById = async (treatment: Treatment) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -49,6 +54,21 @@ const useTreatments = () => {
       setIsLoading(false);
     }
   };
+
+  const deleteTreatmentById = async (id: number) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await deleteTreatment(id);
+      setTreatments((prev) => prev.filter((t) => t.id !== id));
+    } catch (err) {
+      setError("Error deleting treatment");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Initial fetch of treatments
   useEffect(() => {
     fetchTreatments();
@@ -60,7 +80,8 @@ const useTreatments = () => {
     treatments,
     fetchTreatments,
     addTreatment,
-    updateTreatment,
+    updateTreatmentById,
+    deleteTreatmentById,
   };
 };
 

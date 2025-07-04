@@ -4,12 +4,22 @@ import ModalAdd from "./components/ModalAdd";
 import { Card } from "@/components/ui/card";
 import useTreatments from "./hooks/useTreatments";
 import ModalEdit from "./components/ModalEdit";
+import ModalDelete from "./components/ModalDelete";
+import type { Treatment } from "./interfaces";
 const TreatmentsPage = () => {
   const [isOpenModalAdd, setIsOpenModalAdd] = useState(false);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
-  const [selectedTreatment, setSelectedTreatment] = useState<any>(null);
-  const { treatments, addTreatment, updateTreatment, isLoading } =
-    useTreatments();
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(
+    null
+  );
+  const {
+    treatments,
+    addTreatment,
+    updateTreatmentById,
+    deleteTreatmentById,
+    isLoading,
+  } = useTreatments();
   return (
     <div className="space-y-1">
       <Card className="flex flex-row items-center justify-between p-4 bg-white shadow-sm">
@@ -34,6 +44,7 @@ const TreatmentsPage = () => {
         treatments={treatments}
         isLoading={isLoading}
         setIsOpenModalEdit={setIsOpenModalEdit}
+        setIsOpenModalDelete={setIsOpenModalDelete}
         setSelectedTreatment={setSelectedTreatment}
       />
       <ModalAdd
@@ -46,8 +57,16 @@ const TreatmentsPage = () => {
         isOpen={isOpenModalEdit}
         setIsOpen={setIsOpenModalEdit}
         selectedTreatment={selectedTreatment}
-        updateTreatment={updateTreatment}
+        updateTreatmentById={updateTreatmentById}
         isLoading={isLoading}
+      />
+      <ModalDelete
+        isOpen={isOpenModalDelete}
+        setIsOpen={setIsOpenModalDelete}
+        selectedTreatment={selectedTreatment}
+        isLoading={isLoading}
+        setSelectedTreatment={setSelectedTreatment}
+        deleteTreatmentById={deleteTreatmentById}
       />
     </div>
   );

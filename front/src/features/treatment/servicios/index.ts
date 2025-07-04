@@ -30,3 +30,13 @@ export const updateTreatment = async (id: number, data: Treatment) => {
     throw error;
   }
 };
+
+export const deleteTreatment = async (id: number) => {
+  try {
+    const response = await apiClient.delete(`/treatments/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting servicio:", error);
+    throw error;
+  }
+};
