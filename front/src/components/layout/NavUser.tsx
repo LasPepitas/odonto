@@ -25,23 +25,17 @@ import {
 import { Button } from "../ui/button";
 import useAuthStore from "@/features/auth/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-
-export function NavUser({
-  user,
-}: {
-  user: {
-    full_name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+import type { User } from "@/features/users/interfaces";
+import type { AuthStore } from "@/features/auth/interfaces";
+export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
-  const { logout } = useAuthStore();
+  const { logout } = useAuthStore() as AuthStore;
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+    window.location.reload();
   };
   return (
     <SidebarMenu>
@@ -102,13 +96,13 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOutIcon />
               <Button
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start"
                 onClick={() => handleLogout()}
               >
+                <LogOutIcon />
                 Cerrar sesión
               </Button>
             </DropdownMenuItem>

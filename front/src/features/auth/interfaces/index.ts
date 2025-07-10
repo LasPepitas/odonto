@@ -13,13 +13,20 @@ export interface UserRequestRegister {
   password: string;
   role: UserRole;
 }
-
+export interface User {
+  id: number;
+  email: string;
+  full_name: string;
+  role: string;
+  created_at: string;
+}
 export interface AuthStore {
-  user: UserRequestRegister | null;
+  user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
   token: string | null;
   login: (credentials: Credentials) => Promise<void>;
   register: (userData: UserRequestRegister) => Promise<void>;
   logout: () => void;
+  checkAuth: () => Promise<void>;
 }

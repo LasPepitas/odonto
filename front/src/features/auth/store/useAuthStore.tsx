@@ -62,7 +62,7 @@ const useAuthStore = create(
           set({ loading: false, isAuthenticated: false, user: null });
         }
       },
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => set({ user: null, isAuthenticated: false, token: null }),
     }),
     {
       name: "auth-storage", // unique name for the storage

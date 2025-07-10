@@ -4,10 +4,8 @@ import PrivateRoutes from "./routes/PrivateRoutes";
 import { LoginForm } from "./features/auth/components/LoginForm";
 import { RegisterForm } from "./features/auth/components/RegisterForm";
 import { Toaster } from "./components/ui/sonner";
-import UsersPage from "./features/users/UsersPage";
-import { StatsPage } from "./features/Stats/StatsPage";
-import TreatmentsPage from "./features/treatment/Index";
-import PatientsPage from "./features/patients/Index";
+import { appRoutes } from "./routes";
+
 function App() {
   return (
     <BrowserRouter>
@@ -20,10 +18,9 @@ function App() {
           <Route path="/reset-password/:token" element={<PublicRoutes />} />
         </Route>
         <Route element={<PrivateRoutes />}>
-          <Route path="/dashboard/*" element={<StatsPage />} />
-          <Route path="/dashboard/usuarios" element={<UsersPage />} />
-          <Route path="/dashboard/tratamientos" element={<TreatmentsPage />} />
-          <Route path="/dashboard/pacientes" element={<PatientsPage />} />
+          {appRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
         </Route>
         <Route path="*" element={<PublicRoutes />} />
       </Routes>
