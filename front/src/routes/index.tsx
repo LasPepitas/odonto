@@ -1,3 +1,4 @@
+import AppointmentsPage from "@/features/appointments/Index";
 import PatientsPage from "@/features/patients/Index";
 import { StatsPage } from "@/features/Stats/StatsPage";
 import TreatmentsPage from "@/features/treatment/Index";
@@ -31,7 +32,7 @@ export const appRoutes = [
     path: "/dashboard/citas",
     label: "Citas",
     rols: ["admin", "dentist", "receptionist"],
-    element: <div>Citas</div>, // reemplazar por: <AppointmentsPage />
+    element: <AppointmentsPage />,
     icon: Calendar,
   },
   {
