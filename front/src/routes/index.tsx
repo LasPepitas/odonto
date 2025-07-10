@@ -11,15 +11,23 @@ import {
   Box,
   UserCog,
   BarChart,
+  LayoutDashboard,
 } from "lucide-react";
+type AppRoute = {
+  path: string;
+  label: string;
+  icon?: React.ElementType;
+  rols: string[];
+  element: React.ReactNode;
+};
 
-export const appRoutes = [
+export const appRoutes: AppRoute[] = [
   {
     path: "/dashboard/",
     label: "Inicio",
     rols: ["admin", "dentist", "receptionist"],
     element: <StatsPage />,
-    icon: null,
+    icon: LayoutDashboard,
   },
   {
     path: "/dashboard/pacientes",

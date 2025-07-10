@@ -60,7 +60,12 @@ export function AppSidebar() {
                         >
                           <Link
                             to={path}
-                            className="flex items-center space-x-2 text-black hover:!bg-blue-600 hover:text-white font-bold p-2 rounded transition-colors duration-200"
+                            className={`flex items-center space-x-2 text-black hover:!bg-blue-600 hover:text-white font-bold p-2 rounded transition-colors duration-200
+                              ${
+                                location.pathname === path
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-transparent text-black"
+                              }`}
                           >
                             <Icon />
                             <span>{label}</span>

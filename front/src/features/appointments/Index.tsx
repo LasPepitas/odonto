@@ -57,20 +57,22 @@ const AppointmentsPage = () => {
           Nueva Cita
         </Button>
       </Card>
-      <Calendar
-        localizer={localizer}
-        culture={"es"}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: "100vh" }}
-        messages={messagesCalendar}
-        // formats={{
-        //   timeGutterFormat: "HH:mm",
-        //   eventTimeRangeFormat: ({ start, end }, culture, local) =>
-        //     `${local.format(start, "HH:mm")} - ${local.format(end, "HH:mm")}`,
-        // }}
-      />
+      <Card className="p-4">
+        <Calendar
+          localizer={localizer}
+          culture={"es"}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: "100vh" }}
+          messages={messagesCalendar}
+          // formats={{
+          //   timeGutterFormat: "HH:mm",
+          //   eventTimeRangeFormat: ({ start, end }, culture, local) =>
+          //     `${local.format(start, "HH:mm")} - ${local.format(end, "HH:mm")}`,
+          // }}
+        />
+      </Card>
       <ModalAdd
         isDialogOpen={isModalAddOpen}
         setIsDialogOpen={setIsModalAddOpen}

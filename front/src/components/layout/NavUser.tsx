@@ -95,16 +95,9 @@ export function NavUser({ user }: { user: User }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start"
-                onClick={() => handleLogout()}
-              >
-                <LogOutIcon />
-                Cerrar sesión
-              </Button>
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOutIcon className="mr-2 size-4" />
+              Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
