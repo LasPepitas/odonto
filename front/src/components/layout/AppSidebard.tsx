@@ -5,6 +5,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,6 +15,7 @@ import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "@/features/auth/store/useAuthStore";
 import type { AuthStore } from "@/features/auth/interfaces";
 import { appRoutes } from "@/routes";
+import { SmileIcon } from "lucide-react";
 
 export function AppSidebar() {
   const { user } = useAuthStore() as AuthStore;
@@ -21,6 +23,24 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                <SmileIcon className="size-4" />
+              </div>
+              <div className="flex flex-col gap-0.5 leading-none">
+                <span className="font-semibold">DentalCare Pro</span>
+                <span className="text-xs">Gestión Dental</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="h-fit">

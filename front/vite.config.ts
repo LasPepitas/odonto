@@ -16,4 +16,7 @@ export default defineConfig({
       esmExternals: true,
     },
   },
+  optimizeDeps: {
+    include: ["moment/locale/es"],
+  },
 });
