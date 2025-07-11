@@ -22,7 +22,7 @@ const TreatmentsPage = () => {
   } = useTreatments();
   return (
     <div className="space-y-1">
-      <Card className="flex flex-row items-center justify-between p-4 bg-white shadow-sm">
+      <Card className="flex md:flex-row items-center justify-between p-4 bg-white shadow-sm">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
             Gestión de Tratamientos
@@ -31,7 +31,7 @@ const TreatmentsPage = () => {
             Administra los tratamientos y procedimientos
           </p>
         </div>
-        <div className="mt-4">
+        <div className="md:mt-4">
           <button
             onClick={() => setIsOpenModalAdd(true)}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

@@ -3,6 +3,7 @@ import PatientsPage from "@/features/patients/Index";
 import { StatsPage } from "@/features/Stats/StatsPage";
 import TreatmentsPage from "@/features/treatment/Index";
 import UsersPage from "@/features/users/UsersPage";
+import InventoryPage from "@/features/inventory/Index";
 import {
   UserPlus,
   Calendar,
@@ -60,8 +61,8 @@ export const appRoutes: AppRoute[] = [
   {
     path: "/dashboard/inventario",
     label: "Inventario",
-    rols: ["admin"],
-    element: <div>Inventario</div>, // reemplazar por: <InventoryPage />
+    rols: ["admin", "dentist"],
+    element: <InventoryPage />,
     icon: Box,
   },
   {

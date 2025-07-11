@@ -109,14 +109,14 @@ export function PatientManagement() {
       {/* Patients Table */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="flex max-md:flex-col justify-between items-center">
+            <div className="flex-row">
               <CardTitle>Lista de Pacientes</CardTitle>
               <CardDescription>
                 {filteredPatients.length} pacientes encontrados
               </CardDescription>
             </div>
-            <div className="flex space-x-2">
+            <div className="max-md:flex-col flex space-x-2 space-y-1 mt-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 size-4" />
                 <Input
