@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -41,10 +40,12 @@ export function NavUser({ user }: { user: User }) {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="
+              h-9 w-full justify-start rounded-lg data-[state=open]:bg-accent"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={""} alt={user.full_name} />
@@ -57,7 +58,7 @@ export function NavUser({ user }: { user: User }) {
                 </span>
               </div>
               <MoreVerticalIcon className="ml-auto size-4" />
-            </SidebarMenuButton>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
