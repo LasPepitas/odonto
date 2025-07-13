@@ -34,6 +34,15 @@ Route::group([], function () {
     require __DIR__ . '/../app/Modules/Dentist/Routes/Dentist.php';
 });
 // TODO: RUTAS PARA CITA
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Appointment/Routes/Appointment.php';
+});
 // TODO: RUTAS PARA HISTORIAL CLÍNICO
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/ClinicalHistory/Routes/ClinicalHistory.php';
+});
 // TODO: RUTAS PARA FACTURACIÓN
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Payment/Routes/Payment.php';
+});
 // TODO: RUTAS PARA REPORTES

@@ -2,20 +2,19 @@
 
 namespace App\Modules\Appointment\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Modules\Patient\Models\Patient;
+use App\Modules\Dentist\Models\Dentist;
+use App\Modules\Treatment\Models\Treatment;
 
 class Appointment extends Model
 {
-    // Nombre de la tabla (opcional si sigue la convención plural: appointments)
+    use HasFactory;
+
     protected $table = 'appointment';
-
-    // Clave primaria (opcional si es "id")
-    protected $primaryKey = 'id';
-
-    // Si no usas timestamps (created_at, updated_at)
     public $timestamps = false;
 
-    // Campos que pueden ser asignados masivamente
     protected $fillable = [
         'patient_id',
         'dentist_id',
@@ -24,11 +23,46 @@ class Appointment extends Model
         'status',
     ];
 
-    // Opcional: especificar tipos de campos para casting automático
     protected $casts = [
         'patient_id' => 'integer',
         'dentist_id' => 'integer',
         'treatment_id' => 'integer',
         'appointment_datetime' => 'datetime',
     ];
+
+    // Relaciones
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function dentist()
+    {
+        return $this->belongsTo(Dentist::class);
+    }
+
+    public function treatment()
+    {
+        return $this->belongsTo(Treatment::class);
+    }
+
+    // Método helper para obtener citas por dentista
+    public function getByDentist($dentistId)
+    {
+        $appointments = Appointment::where('dentist_id', $dentistId)
+            ->with(['patient', 'treatment'])
+            ->get();
+            
+        return response()->json($appointments);
+    }
+
+    // Método helper para obtener citas por paciente
+    public function getByPatient($patientId)
+    {
+        $appointments = Appointment::where('patient_id', $patientId)
+            ->with(['dentist', 'treatment'])
+            ->get();
+            
+        return response()->json($appointments);
+    }
 }
