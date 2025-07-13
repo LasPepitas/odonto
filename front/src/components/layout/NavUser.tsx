@@ -18,39 +18,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
 import useAuthStore from "@/features/auth/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-
-export function NavUser({
-  user,
-}: {
-  user: {
-    full_name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+import type { User } from "@/features/users/interfaces";
+import type { AuthStore } from "@/features/auth/interfaces";
+export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
-  const { logout } = useAuthStore();
+  const { logout } = useAuthStore() as AuthStore;
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+    window.location.reload();
   };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="
+              h-9 w-full justify-start rounded-lg data-[state=open]:bg-accent"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={""} alt={user.full_name} />
@@ -63,7 +58,7 @@ export function NavUser({
                 </span>
               </div>
               <MoreVerticalIcon className="ml-auto size-4" />
-            </SidebarMenuButton>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
@@ -101,16 +96,9 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOutIcon />
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start"
-                onClick={() => handleLogout()}
-              >
-                Cerrar sesión
-              </Button>
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOutIcon className="mr-2 size-4" />
+              Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

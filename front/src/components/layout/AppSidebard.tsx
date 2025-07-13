@@ -1,78 +1,46 @@
 import {
-  UserPlus,
-  Calendar,
-  FileText,
-  DollarSign,
-  Box,
-  UserCog,
-  BarChart,
-} from "lucide-react";
-
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./NavUser";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "@/features/auth/store/useAuthStore";
+import type { AuthStore } from "@/features/auth/interfaces";
+import { appRoutes } from "@/routes";
+import { SmileIcon } from "lucide-react";
 
-// Menú para sistema odontológico.
-const items = [
-  {
-    title: "Pacientes",
-    url: "/dashboard/pacientes",
-    icon: UserPlus,
-  },
-  {
-    title: "Citas",
-    url: "/dashboard/citas",
-    icon: Calendar,
-  },
-  {
-    title: "Tratamientos",
-    url: "/dashboard/tratamientos",
-    icon: FileText,
-  },
-  {
-    title: "Pagos",
-    url: "/dashboard/pagos",
-    icon: DollarSign,
-  },
-  {
-    title: "Inventario",
-    url: "/dashboard/inventario",
-    icon: Box,
-  },
-  {
-    title: "Usuarios",
-    url: "/dashboard/usuarios",
-    icon: UserCog,
-  },
-  {
-    title: "Reportes",
-    url: "/dashboard/reportes",
-    icon: BarChart,
-  },
-];
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/dashboard/avatars/shadcn.jpg",
-  },
-};
 export function AppSidebar() {
-  const { user } = useAuthStore();
-  console.log("AppSidebar user", user);
+  const { user } = useAuthStore() as AuthStore;
+  const location = useLocation();
+
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                <SmileIcon className="size-4" />
+              </div>
+              <div className="flex flex-col gap-0.5 leading-none">
+                <span className="font-semibold">DentalCare Pro</span>
+                <span className="text-xs">Gestión Dental</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="h-fit">
@@ -80,22 +48,32 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent className="flex flex-col h-full justify-between">
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={window.location.pathname === item.url}
-                  >
-                    <Link
-                      to={item.url}
-                      className="flex items-center space-x-2 text-black hover:!bg-blue-600 hover:text-white font-bold p-2 rounded transition-colors duration-200"
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {appRoutes
+                .filter((item) => item.icon && item.rols.includes(user?.role))
+                .map(
+                  ({ path, label, icon: Icon }) =>
+                    Icon && (
+                      <SidebarMenuItem key={path}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={location.pathname === path}
+                        >
+                          <Link
+                            to={path}
+                            className={`flex items-center space-x-2 text-black hover:!bg-blue-600 hover:text-white font-bold p-2 rounded transition-colors duration-200
+                              ${
+                                location.pathname === path
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-transparent text-black"
+                              }`}
+                          >
+                            <Icon />
+                            <span>{label}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )
+                )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
