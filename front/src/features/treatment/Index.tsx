@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TableTreatments from "./components/TableTreatments";
 import ModalAdd from "./components/ModalAdd";
 import { Card } from "@/components/ui/card";
