@@ -1,26 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-// import moment from "moment";
-// import "moment/locale/es";
 import moment from "moment/min/moment-with-locales";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import ModalAdd from "./components/ModalAdd";
-import "globalize/lib/cultures/globalize.culture.es";
+import ModalEventDetails from "./components/ModalEventDetails";
+import useAppointments from "./hooks/useAppointments";
+import { convertAppointmentsToEvents } from "./utils";
+import type { UseAppointmentsReturn } from "./interfaces";
 
 moment.locale("es");
 const localizer = momentLocalizer(moment);
-
-const events = [
-  {
-    title: "Consulta odontológica",
-    start: new Date(2025, 6, 15, 10, 0), // 15 julio 2025, 10:00 AM
-    end: new Date(2025, 6, 15, 11, 0), // 11:00 AM
-    allDay: false,
-  },
-];
 
 const messagesCalendar = {
   week: "Semana",
@@ -37,9 +29,28 @@ const messagesCalendar = {
   event: "Evento",
   showMore: (total) => `+${total} más`,
 };
+
 const AppointmentsPage = () => {
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [events, setEvents] = useState<any[]>([]);
+  const { appointments, addAppointment, loading, fetchAppointments } =
+    useAppointments() as UseAppointmentsReturn;
+  // const events = convertAppointmentsToEvents(appointments);
 
+  const handleSelectEvent = (event: any) => {
+    setSelectedEvent(event);
+    setIsEventModalOpen(true);
+  };
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+  useEffect(() => {
+    if (appointments.length > 0) {
+      setEvents(convertAppointmentsToEvents(appointments));
+    }
+  }, [appointments]);
   return (
     <div className="min-h-screen pb-4 space-y-2">
       <Card className="flex flex-row items-center justify-between p-4 bg-white shadow-sm">
@@ -57,25 +68,31 @@ const AppointmentsPage = () => {
           Nueva Cita
         </Button>
       </Card>
+
       <Card className="p-4">
         <Calendar
           localizer={localizer}
-          culture={"es"}
+          culture="es"
           events={events}
           startAccessor="start"
           endAccessor="end"
           style={{ height: "100vh" }}
           messages={messagesCalendar}
-          // formats={{
-          //   timeGutterFormat: "HH:mm",
-          //   eventTimeRangeFormat: ({ start, end }, culture, local) =>
-          //     `${local.format(start, "HH:mm")} - ${local.format(end, "HH:mm")}`,
-          // }}
+          onSelectEvent={handleSelectEvent}
         />
       </Card>
+
       <ModalAdd
         isDialogOpen={isModalAddOpen}
         setIsDialogOpen={setIsModalAddOpen}
+        addAppointment={addAppointment}
+        loading={loading}
+      />
+
+      <ModalEventDetails
+        isOpen={isEventModalOpen}
+        onClose={() => setIsEventModalOpen(false)}
+        event={selectedEvent}
       />
     </div>
   );

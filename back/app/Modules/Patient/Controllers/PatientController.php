@@ -12,7 +12,12 @@ class PatientController extends Controller
     // 🧾 Mostrar todos los pacientes
     public function index()
     {
-        $patients = Patient::all();
+        $search = request()->query('search');
+        $patients = Patient::when($search, function ($query, $search) {
+            return $query->where('full_name', 'like', '%' . $search . '%')
+                ->orWhere('dni', 'like', '%' . $search . '%');
+        })->get();
+
 
         return response()->json([
             'success' => true,

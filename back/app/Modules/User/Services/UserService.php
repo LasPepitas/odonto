@@ -3,6 +3,7 @@
 namespace App\Modules\User\Services;
 
 use App\Modules\User\Models\User;
+use App\Modules\Dentist\Models\Dentist;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -16,19 +17,38 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
-    public function getAllUsers(): Collection
+    public function getAllUsers($search): Collection
     {
-        return User::all();
+        return User::when($search, function ($query, $search) {
+            return $query->where('email', 'like', '%' . $search . '%')
+                ->orWhere('full_name', 'like', '%' . $search . '%')
+                ->orWhere('role', 'like', '%' . $search . '%');
+        })->get();
     }
 
     public function createUser(array $data): User
     {
-        return User::create([
+        // Validar que el email no exista
+        if (User::where('email', $data['email'])->exists()) {
+            throw ValidationException::withMessages([
+                'email' => ['El correo electrónico ya está en uso.'],
+            ]);
+        }
+
+        $user = User::create([
             'email' => strtolower($data['email']),
             'full_name' => $data['full_name'],
             'password_hash' => bcrypt($data['password']),
             'role' => $data['role']
         ]);
+
+        if ($data['role'] === 'dentist') {
+            Dentist::create([
+                'user_id' => $user->id,
+                'specialty' => $data['specialty'] ?? null,
+            ]);
+        }
+        return $user;
     }
 
     public function updateUser(User $user, array $data): User

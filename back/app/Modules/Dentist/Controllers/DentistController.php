@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Modules\Dentist\Models\Dentist;
+use App\Modules\User\Models\User;
+
 
 class DentistController extends Controller
 {
     // 🧾 Mostrar todos los dentistas
     public function index()
     {
-        $dentists = Dentist::all();
+        $dentists = Dentist::join('user', 'dentist.user_id', '=', 'user.id')
+            ->select('dentist.*', 'user.email', 'user.full_name')
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -59,7 +63,7 @@ class DentistController extends Controller
             'data' => $dentist
         ], 201);
     }
-    
+
     // ✏️ Actualizar dentista
     public function update(Request $request, $id)
     {

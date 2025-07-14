@@ -70,7 +70,8 @@ class UserController extends Controller
 
     public function index(): JsonResponse
     {
-        $users = $this->userService->getAllUsers();
+        $search = request()->query('search');
+        $users = $this->userService->getAllUsers($search);
         return response()->json($users);
     }
 

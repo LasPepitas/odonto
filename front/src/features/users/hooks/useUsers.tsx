@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { createUser, deleteUserById, updateUser, getUsers } from "../services";
+import {
+  createUser,
+  deleteUserById,
+  updateUser,
+  getUsers,
+  getDentists,
+} from "../services";
 import type { User, UserPayload } from "../interfaces";
 
 const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [dentists, setDentists] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -11,7 +18,7 @@ const useUsers = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getUsers();
+      const data = await getUsers("");
       setUsers(data);
     } catch (err) {
       setError("Error al obtener usuarios");
@@ -60,8 +67,23 @@ const useUsers = () => {
     }
   };
 
+  const fetchDentists = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await getDentists();
+      setDentists(data);
+    } catch (err) {
+      setError("Error al obtener dentistas");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchDentists();
   }, []);
 
   return {
@@ -72,6 +94,8 @@ const useUsers = () => {
     addUser,
     updateUserById,
     removeUser,
+    dentists,
+    setDentists,
   };
 };
 

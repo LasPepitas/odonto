@@ -10,3 +10,12 @@ export const getPatients = async () => {
   const response = await apiClient.get("/patients");
   return response.data;
 };
+export const updatePatient = async (id: number, data: Patient) => {
+  const response = await apiClient.put(`/patients/${id}`, data);
+  return response.data;
+};
+
+export const deletePatient = async (id: number) => {
+  const response = await apiClient.delete(`/patients/${id}`);
+  return response.data;
+};

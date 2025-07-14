@@ -17,13 +17,56 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { timeSlots } from "../utils";
+import UsePatients from "@/features/patients/hooks/UsePatients";
+import type { UsePatientsReturn } from "@/features/patients/interfaces";
+import useUsers from "@/features/users/hooks/useUsers";
+import useTreatments from "@/features/treatment/hooks/useTreatments";
+import { useState } from "react";
+import type { AppointmentRequest } from "../interfaces";
+
 const ModalAdd = ({
   isDialogOpen,
   setIsDialogOpen,
+  addAppointment,
+  loading = false,
 }: {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
+  addAppointment: (appointmentData: AppointmentRequest) => Promise<void>;
+  loading?: boolean;
 }) => {
+  const { patients } = UsePatients() as UsePatientsReturn;
+  const { dentists } = useUsers();
+  const { treatments } = useTreatments();
+
+  const [appointmentData, setAppointmentData] = useState({
+    patient_id: "",
+    dentist_id: "",
+    treatment_id: "",
+  });
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+
+  const handleAddAppointment = () => {
+    if (selectedDate && selectedTime) {
+      const datetime = `${selectedDate}T${selectedTime}`;
+      addAppointment({
+        patient_id: parseInt(appointmentData.patient_id, 10),
+        dentist_id: parseInt(appointmentData.dentist_id, 10),
+        treatment_id: parseInt(appointmentData.treatment_id, 10),
+        status: "scheduled",
+        appointment_datetime: datetime,
+      })
+        .then(() => {
+          setIsDialogOpen(false);
+        })
+        .catch((error) => {
+          console.error("Error al crear cita:", error);
+        });
+    }
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -38,14 +81,20 @@ const ModalAdd = ({
             <Label htmlFor="patient" className="text-right">
               Paciente
             </Label>
-            <Select>
+            <Select
+              onValueChange={(value) =>
+                setAppointmentData((prev) => ({ ...prev, patient_id: value }))
+              }
+            >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Seleccionar paciente" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="maria">María García</SelectItem>
-                <SelectItem value="carlos">Carlos López</SelectItem>
-                <SelectItem value="ana">Ana Martínez</SelectItem>
+                {patients.map((patient) => (
+                  <SelectItem key={patient.id} value={patient.id.toString()}>
+                    {patient.full_name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -53,14 +102,20 @@ const ModalAdd = ({
             <Label htmlFor="dentist" className="text-right">
               Odontólogo
             </Label>
-            <Select>
+            <Select
+              onValueChange={(value) =>
+                setAppointmentData((prev) => ({ ...prev, dentist_id: value }))
+              }
+            >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Seleccionar odontólogo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="juan">Dr. Juan Pérez</SelectItem>
-                <SelectItem value="ana">Dra. Ana Ruiz</SelectItem>
-                <SelectItem value="miguel">Dr. Miguel Torres</SelectItem>
+                {dentists.map((dentist) => (
+                  <SelectItem key={dentist.id} value={dentist.id.toString()}>
+                    {dentist.full_name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -68,13 +123,19 @@ const ModalAdd = ({
             <Label htmlFor="date" className="text-right">
               Fecha
             </Label>
-            <Input id="date" type="date" className="col-span-3" />
+            <Input
+              id="date"
+              type="date"
+              className="col-span-3"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="time" className="text-right">
               Hora
             </Label>
-            <Select>
+            <Select onValueChange={(value) => setSelectedTime(value)}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Seleccionar hora" />
               </SelectTrigger>
@@ -91,16 +152,34 @@ const ModalAdd = ({
             <Label htmlFor="treatment" className="text-right">
               Tratamiento
             </Label>
-            <Input
-              id="treatment"
-              placeholder="Tipo de tratamiento"
-              className="col-span-3"
-            />
+            <Select
+              onValueChange={(value) =>
+                setAppointmentData((prev) => ({ ...prev, treatment_id: value }))
+              }
+            >
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Seleccionar tratamiento" />
+              </SelectTrigger>
+              <SelectContent>
+                {treatments.map((treatment) => (
+                  <SelectItem
+                    key={treatment.id}
+                    value={treatment.id.toString()}
+                  >
+                    {treatment.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => setIsDialogOpen(false)}>
-            Agendar Cita
+          <Button
+            type="submit"
+            onClick={handleAddAppointment}
+            className="cursor-pointer"
+          >
+            {loading ? "Cargando..." : "Agendar Cita"}
           </Button>
         </DialogFooter>
       </DialogContent>
