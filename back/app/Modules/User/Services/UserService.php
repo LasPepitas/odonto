@@ -72,7 +72,7 @@ class UserService
         // Debug: Verificar qué está recibiendo
 
         // Buscar el usuario directamente
-        $user = User::join('dentist', 'dentist.user_id', '=', 'user.id')
+        $user = User::join('dentist', 'dentist.user_id', '=', 'user.id', 'left')
             ->where('user.email', $credentials['email'])
             ->select('user.*', 'dentist.id as dentist_id')
             ->first();
