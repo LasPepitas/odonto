@@ -13,7 +13,9 @@ const UsePatients = () => {
     try {
       const fetchedPatients = await getPatients();
       setPatients(fetchedPatients.data);
-      toast.success("Pacientes cargados correctamente");
+      toast.success("Pacientes cargados correctamente", {
+        duration: 500,
+      });
     } catch (err) {
       setError("Error fetching patients");
       console.error(err);

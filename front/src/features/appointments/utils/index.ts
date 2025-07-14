@@ -35,15 +35,21 @@ export const getStatusColor = (status: string) => {
 };
 
 export const convertAppointmentToEvent = (appointment: any) => {
+  const start = new Date(appointment.appointment_datetime);
+  const end = new Date(start.getTime() + 60 * 60 * 1000); // duración de 1 hora
+
   return {
-    title: appointment.treatment,
-    start: new Date(appointment.date + "T" + appointment.time),
-    end: new Date(
-      new Date(appointment.date + "T" + appointment.time).getTime() +
-        60 * 60 * 1000 // Asumiendo duración de 1 hora
-    ),
+    title: appointment.treatment?.name || "Cita odontológica",
+    start,
+    end,
     allDay: false,
     status: appointment.status,
     patient: appointment.patient,
+    dentist: appointment.dentist,
+    treatment: appointment.treatment,
+    id: appointment.id,
   };
+};
+export const convertAppointmentsToEvents = (appointments: any[]) => {
+  return appointments.map(convertAppointmentToEvent);
 };
