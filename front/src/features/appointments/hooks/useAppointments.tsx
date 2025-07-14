@@ -22,10 +22,10 @@ const useAppointmentsStore = create<AppointmentsState>((set) => ({
 
   setAppointments: (appointments) => set({ appointments }),
 
-  fetchAppointments: async () => {
+  fetchAppointments: async (params) => {
     set({ loading: true, error: null });
     try {
-      const { data } = await getAppointments();
+      const { data } = await getAppointments(params);
       set({
         appointments: data.data,
         notPayedAppointments: data.data.filter(

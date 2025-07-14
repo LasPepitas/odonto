@@ -72,7 +72,10 @@ class UserService
         // Debug: Verificar qué está recibiendo
 
         // Buscar el usuario directamente
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::join('dentist', 'dentist.user_id', '=', 'user.id')
+            ->where('user.email', $credentials['email'])
+            ->select('user.*', 'dentist.id as dentist_id')
+            ->first();
 
         if (!$user) {
             throw new \Exception('Usuario no encontrado', 404);

@@ -18,11 +18,17 @@ import { appRoutes } from "@/routes";
 import { SmileIcon, CalendarDays, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import useAppointments from "@/features/appointments/hooks/useAppointments";
+import { useEffect } from "react";
 
 export function AppSidebar() {
   const { user } = useAuthStore() as AuthStore;
   const location = useLocation();
-  const { appointments } = useAppointments();
+  const { appointments, fetchAppointments } = useAppointments();
+  useEffect(() => {
+    if (user?.dentist_id) {
+      fetchAppointments({ dentist_id: user.dentist_id });
+    }
+  }, [user]);
   return (
     <Sidebar>
       <div className="flex h-full flex-col bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">

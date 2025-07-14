@@ -10,6 +10,7 @@ import ModalEventDetails from "./components/ModalEventDetails";
 import useAppointments from "./hooks/useAppointments";
 import { convertAppointmentsToEvents } from "./utils";
 import type { UseAppointmentsReturn } from "./interfaces";
+import useAuthStore from "../auth/store/useAuthStore";
 
 moment.locale("es");
 const localizer = momentLocalizer(moment);
@@ -35,6 +36,8 @@ const AppointmentsPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
+  const { user } = useAuthStore();
+  console.log("User:", user);
   const { appointments, addAppointment, loading, fetchAppointments } =
     useAppointments() as UseAppointmentsReturn;
   // const events = convertAppointmentsToEvents(appointments);
@@ -44,7 +47,9 @@ const AppointmentsPage = () => {
     setIsEventModalOpen(true);
   };
   useEffect(() => {
-    fetchAppointments();
+    if (user?.dentist_id) {
+      fetchAppointments({ dentist_id: user.dentist_id });
+    }
   }, [fetchAppointments]);
   useEffect(() => {
     if (appointments.length > 0) {

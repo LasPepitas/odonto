@@ -3,6 +3,7 @@
 namespace App\Modules\User\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Dentist\Models\Dentist;
 use App\Modules\User\Models\User;
 use App\Modules\User\Services\UserService;
 use Illuminate\Http\Request;
@@ -60,6 +61,8 @@ class UserController extends Controller
     public function profile(): JsonResponse
     {
         $user = auth()->user();
+        $dentist_id = Dentist::where('user_id', $user->id)->value('id');
+        $user['dentist_id'] = $dentist_id;
         // debug logs
         \Log::debug('User profile accessed', ['user' => $user]);
         if (!$user) {
