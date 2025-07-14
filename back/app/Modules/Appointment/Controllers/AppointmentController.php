@@ -36,9 +36,8 @@ class AppointmentController extends Controller
             if ($request->status) {
                 $query->where('status', $request->status);
             }
-
             $appointments = $query->orderBy('appointment_datetime', 'desc')
-                                ->paginate(15);
+                ->paginate(15);
 
             return response()->json([
                 'success' => true,
@@ -48,7 +47,8 @@ class AppointmentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error retrieving appointments'
+                'message' => 'Error retrieving appointments',
+                'errors' => $e->getMessage()
             ], 500);
         }
     }
@@ -91,11 +91,11 @@ class AppointmentController extends Controller
     /**
      * GET /appointments/{id} - Obtener cita específica
      */
-     public function show(int $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         try {
             $appointment = Appointment::with(['patient', 'dentist', 'treatment'])
-                                    ->findOrFail($id);
+                ->findOrFail($id);
 
             return response()->json([
                 'success' => true,

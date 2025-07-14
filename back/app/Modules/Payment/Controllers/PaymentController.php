@@ -29,9 +29,13 @@ class PaymentController extends Controller
             if ($request->treatment_id) {
                 $query->where('treatment_id', $request->treatment_id);
             }
+            // join con patient y treatment
+            $query->join('patient', 'payment.appointment_id', '=', 'patient.id')
+                ->join('treatment', 'payment.treatment_id', '=', 'treatment.id')
+                ->select('payment.*', 'patient.full_name as patient_name', 'treatment.name as treatment_name');
 
             $payments = $query->orderBy('payment_date', 'desc')
-                             ->paginate(15);
+                ->paginate(15);
 
             return response()->json([
                 'success' => true,
@@ -41,7 +45,8 @@ class PaymentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error retrieving payments'
+                'message' => 'Error retrieving payments',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -88,7 +93,7 @@ class PaymentController extends Controller
     {
         try {
             $payment = Payment::with(['appointment', 'treatment'])
-                             ->findOrFail($id);
+                ->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -222,7 +227,7 @@ class PaymentController extends Controller
 
             // Construir query base
             $query = Payment::whereBetween('payment_date', [$startDate, $endDate])
-                           ->with(['appointment.patient', 'appointment.dentist', 'treatment']);
+                ->with(['appointment.patient', 'appointment.dentist', 'treatment']);
 
             // Filtro por dentista si se especifica
             if ($dentistId) {
@@ -313,7 +318,7 @@ class PaymentController extends Controller
                     'end_date' => $endDate,
                     'total_days' => Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate)) + 1
                 ];
-                
+
                 // Para rangos, incluir estadísticas por día
                 $responseData['daily_statistics'] = $payments->groupBy(function ($payment) {
                     return Carbon::parse($payment->payment_date)->format('Y-m-d');
