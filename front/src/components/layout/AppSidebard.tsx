@@ -27,6 +27,8 @@ export function AppSidebar() {
   useEffect(() => {
     if (user?.dentist_id) {
       fetchAppointments({ dentist_id: user.dentist_id });
+    } else {
+      fetchAppointments();
     }
   }, [user]);
   return (
