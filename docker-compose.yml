@@ -49,9 +49,28 @@ services:
       - backend
     networks:
       - app-network
+  mysql-backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    container_name: mysql-backup
+    restart: always
+    volumes:
+      - mysql_backups:/backup
+      - ./backups:/backup/output
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=odonto
+    depends_on:
+      - mysql
+    networks:
+      - app-network
 
 volumes:
   mysql_data:
+  mysql_backups:
 
 networks:
   app-network:
