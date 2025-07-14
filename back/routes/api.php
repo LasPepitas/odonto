@@ -45,4 +45,7 @@ Route::group([], function () {
 Route::group([], function () {
     require __DIR__ . '/../app/Modules/Payment/Routes/Payment.php';
 });
-// TODO: RUTAS PARA REPORTES
+// TODO: RUTAS PARA INVENTARIO
+Route::group([], function () {
+    require __DIR__ . '/../app/Modules/Inventory/Routes/Inventory.php';
+});
