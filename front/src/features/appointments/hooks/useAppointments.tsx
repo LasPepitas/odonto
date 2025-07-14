@@ -1,60 +1,61 @@
-import { useEffect, useState } from "react";
+import { create } from "zustand";
+import { toast } from "sonner";
 import type { Appointment, AppointmentRequest } from "../interfaces";
 import { createAppointment, getAppointments } from "../services";
 import { convertAppointmentToEvent } from "../utils";
-import { toast } from "sonner";
-const useAppointments = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [notPayedAppointments, setNotPaidAppointments] = useState<
-    Appointment[]
-  >([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const addAppointment = async (appointmentData: AppointmentRequest) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const newAppointment = await createAppointment(appointmentData);
-      setAppointments((prev) => [
-        ...prev,
-        convertAppointmentToEvent(newAppointment.data),
-      ]);
-    } catch (err) {
-      setError("Error al crear cita");
-      toast.error("Error al crear la cita");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchAppointments = async () => {
-    setLoading(true);
-    setError(null);
+
+interface AppointmentsState {
+  appointments: Appointment[];
+  notPayedAppointments: Appointment[];
+  loading: boolean;
+  error: string | null;
+  fetchAppointments: () => Promise<void>;
+  addAppointment: (appointment: AppointmentRequest) => Promise<void>;
+  setAppointments: (appointments: Appointment[]) => void;
+}
+
+const useAppointmentsStore = create<AppointmentsState>((set) => ({
+  appointments: [],
+  notPayedAppointments: [],
+  loading: false,
+  error: null,
+
+  setAppointments: (appointments) => set({ appointments }),
+
+  fetchAppointments: async () => {
+    set({ loading: true, error: null });
     try {
       const { data } = await getAppointments();
-      setAppointments(data.data);
-      setNotPaidAppointments(
-        data.data.filter((appointment) => appointment.status === "completed")
-      );
-    } catch (err) {
-      setError("Error al obtener citas");
+      set({
+        appointments: data.data,
+        notPayedAppointments: data.data.filter(
+          (appointment) => appointment.status === "completed"
+        ),
+      });
+    } catch (error) {
+      console.error(error);
       toast.error("Error al obtener las citas");
-      console.error(err);
+      set({ error: "Error al obtener citas" });
     } finally {
-      setLoading(false);
+      set({ loading: false });
     }
-  };
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
-  return {
-    appointments,
-    setAppointments,
-    loading,
-    error,
-    addAppointment,
-    fetchAppointments,
-  };
-};
+  },
 
-export default useAppointments;
+  addAppointment: async (appointmentData) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await createAppointment(appointmentData);
+      set((state) => ({
+        appointments: [...state.appointments, response.data],
+      }));
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al crear la cita");
+      set({ error: "Error al crear cita" });
+    } finally {
+      set({ loading: false });
+    }
+  },
+}));
+
+export default useAppointmentsStore;

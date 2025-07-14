@@ -3,7 +3,7 @@
 namespace App\Modules\Payment\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Payment\Models\payment;
+use App\Modules\Payment\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -30,7 +30,8 @@ class PaymentController extends Controller
                 $query->where('treatment_id', $request->treatment_id);
             }
             // join con patient y treatment
-            $query->join('patient', 'payment.appointment_id', '=', 'patient.id')
+            $query->join('appointment', 'payment.appointment_id', '=', 'appointment.id')
+                ->join('patient', 'appointment.patient_id', '=', 'patient.id')
                 ->join('treatment', 'payment.treatment_id', '=', 'treatment.id')
                 ->select('payment.*', 'patient.full_name as patient_name', 'treatment.name as treatment_name');
 

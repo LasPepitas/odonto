@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -34,16 +34,23 @@ const AppointmentsPage = () => {
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-
-  const { appointments, addAppointment, loading } =
+  const [events, setEvents] = useState<any[]>([]);
+  const { appointments, addAppointment, loading, fetchAppointments } =
     useAppointments() as UseAppointmentsReturn;
-  const events = convertAppointmentsToEvents(appointments);
+  // const events = convertAppointmentsToEvents(appointments);
 
   const handleSelectEvent = (event: any) => {
     setSelectedEvent(event);
     setIsEventModalOpen(true);
   };
-
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+  useEffect(() => {
+    if (appointments.length > 0) {
+      setEvents(convertAppointmentsToEvents(appointments));
+    }
+  }, [appointments]);
   return (
     <div className="min-h-screen pb-4 space-y-2">
       <Card className="flex flex-row items-center justify-between p-4 bg-white shadow-sm">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import {
 import useAppointments from "@/features/appointments/hooks/useAppointments";
 
 const ModalAddPayment = ({ isOpen, setIsOpen, addPayment, isLoading }) => {
-  const { appointments } = useAppointments();
+  const { appointments, fetchAppointments } = useAppointments();
   const [formData, setFormData] = useState({
     appointment_id: "",
     treatment_id: "",
@@ -58,7 +58,9 @@ const ModalAddPayment = ({ isOpen, setIsOpen, addPayment, isLoading }) => {
   const selectedTreatment = appointments.find(
     (a) => a.id === parseInt(formData.appointment_id)
   )?.treatment;
-
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[500px]">
