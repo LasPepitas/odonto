@@ -39,7 +39,7 @@ export function StatsPage() {
     (appt) => appt.appointment_datetime.slice(0, 10) === today
   );
   const inventoryAlerts = inventory.filter(
-    (item) => item.stock < item.min_stock
+    (item) => item.actual_stock < item.min_stock
   );
 
   const totalPayments = payments.reduce(
