@@ -7,12 +7,11 @@ import InventoryPage from "@/features/inventory/Index";
 import {
   UserPlus,
   Calendar,
-  FileText,
   DollarSign,
   Box,
   UserCog,
-  BarChart,
   LayoutDashboard,
+  Stethoscope,
 } from "lucide-react";
 import PaymentsPage from "@/features/payments/Index";
 type AppRoute = {
@@ -50,7 +49,7 @@ export const appRoutes: AppRoute[] = [
     label: "Tratamientos",
     rols: ["admin", "dentist"],
     element: <TreatmentsPage />,
-    icon: FileText,
+    icon: Stethoscope,
   },
   {
     path: "/dashboard/pagos",
@@ -73,11 +72,11 @@ export const appRoutes: AppRoute[] = [
     element: <UsersPage />,
     icon: UserCog,
   },
-  {
-    path: "/dashboard/reportes",
-    label: "Reportes",
-    rols: ["admin"],
-    element: <div>Reportes</div>, // reemplazar por: <ReportsPage />
-    icon: BarChart,
-  },
+  // {
+  //   path: "/dashboard/reportes",
+  //   label: "Reportes",
+  //   rols: ["admin"],
+  //   element: <div>Reportes</div>, // reemplazar por: <ReportsPage />
+  //   icon: BarChart,
+  // },
 ];

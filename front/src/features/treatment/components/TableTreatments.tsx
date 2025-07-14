@@ -17,12 +17,14 @@ const TableTreatments = ({
   setIsOpenModalEdit,
   setIsOpenModalDelete,
   setSelectedTreatment,
+  searchTerm = "",
 }: {
   treatments: Treatment[];
   isLoading: boolean;
   setIsOpenModalEdit: (open: boolean) => void;
   setIsOpenModalDelete: (open: boolean) => void;
   setSelectedTreatment: (treatment: Treatment | null) => void;
+  searchTerm?: string;
 }) => {
   if (isLoading) {
     return (
@@ -38,7 +40,15 @@ const TableTreatments = ({
     setIsOpenModalDelete(true);
     setSelectedTreatment(treatments.find((t) => t.id === treatmentId) || null);
   };
-
+  const handleEdit = (treatment: Treatment) => {
+    setSelectedTreatment(treatment);
+    setIsOpenModalEdit(true);
+  };
+  const filteredTreatments = treatments.filter(
+    (treatment) =>
+      treatment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      treatment.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <Card>
       <CardContent>
@@ -52,7 +62,7 @@ const TableTreatments = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {treatments?.map((treatment) => (
+            {filteredTreatments?.map((treatment) => (
               <TableRow key={treatment.id}>
                 <TableCell className="font-medium">{treatment.name}</TableCell>
                 <TableCell>
@@ -73,10 +83,7 @@ const TableTreatments = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => {
-                        setIsOpenModalEdit(true);
-                        setSelectedTreatment(treatment);
-                      }}
+                      onClick={() => handleEdit(treatment)}
                     >
                       <Edit className="size-4" />
                     </Button>

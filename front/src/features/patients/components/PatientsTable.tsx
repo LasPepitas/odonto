@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash2, Phone } from "lucide-react";
 import UsePatients from "../hooks/UsePatients";
-import type { UsePatientsReturn } from "../interfaces";
+import type { Patient, UsePatientsReturn } from "../interfaces";
 import SkeletonLoaderPatientTable from "./SkeletonLoaderPatientTable";
 
 // const patients = [
@@ -60,8 +60,17 @@ import SkeletonLoaderPatientTable from "./SkeletonLoaderPatientTable";
 //   },
 // ];
 
-export function PatientManagement() {
-  const [searchTerm, setSearchTerm] = useState("");
+export function PatientManagement({
+  setModalEditOpen,
+  setModalDeleteOpen,
+  setSelectedPatient,
+  searchTerm = "",
+}: {
+  setModalEditOpen: (open: boolean) => void;
+  setModalDeleteOpen: (open: boolean) => void;
+  setSelectedPatient: (patient: Patient | null) => void;
+  searchTerm?: string;
+}) {
   const { patients, isLoading } = UsePatients() as UsePatientsReturn;
   const filteredPatients = patients.filter(
     (patient) =>
@@ -81,6 +90,16 @@ export function PatientManagement() {
       age--;
     }
     return age;
+  };
+
+  const handleEdit = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setModalEditOpen(true);
+  };
+
+  const handleDelete = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setModalDeleteOpen(true);
   };
 
   if (isLoading) {
@@ -122,13 +141,18 @@ export function PatientManagement() {
             <TableCell>{castDateToAge(patient.birth_date)} años</TableCell>
             <TableCell>
               <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(patient)}
+                >
                   <Edit className="size-4" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="text-red-600 hover:text-red-700"
+                  onClick={() => handleDelete(patient)}
                 >
                   <Trash2 className="size-4" />
                 </Button>

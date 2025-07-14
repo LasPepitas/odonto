@@ -19,4 +19,6 @@ export interface UsePatientsReturn {
   patients: Patient[];
   fetchPatients: () => Promise<void>;
   addPatient: (patient: Patient) => Promise<void>;
+  updatePatient: (id: number, patient: Patient) => Promise<void>;
+  deletePatient: (id: number) => Promise<void>;
 }
