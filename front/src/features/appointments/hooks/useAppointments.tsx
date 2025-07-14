@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Appointment, AppointmentRequest } from "../interfaces";
 import { createAppointment, getAppointments } from "../services";
 import { convertAppointmentToEvent } from "../utils";
+import { toast } from "sonner";
 const useAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [notPayedAppointments, setNotPaidAppointments] = useState<
@@ -20,6 +21,7 @@ const useAppointments = () => {
       ]);
     } catch (err) {
       setError("Error al crear cita");
+      toast.error("Error al crear la cita");
       console.error(err);
     } finally {
       setLoading(false);
@@ -36,6 +38,7 @@ const useAppointments = () => {
       );
     } catch (err) {
       setError("Error al obtener citas");
+      toast.error("Error al obtener las citas");
       console.error(err);
     } finally {
       setLoading(false);

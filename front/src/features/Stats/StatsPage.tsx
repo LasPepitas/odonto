@@ -16,12 +16,15 @@ import {
   ChevronRight,
   DollarSign,
   LineChart,
+  CheckCircle,
+  BarChart3,
 } from "lucide-react";
 import useAppointments from "@/features/appointments/hooks/useAppointments";
 import useInventory from "@/features/inventory/hooks/useInventory";
 import usePatients from "@/features/patients/hooks/UsePatients";
 import { useNavigate } from "react-router-dom";
 import usePayments from "../payments/hooks/usePayments";
+import { getStatusColor } from "./utils";
 
 export function StatsPage() {
   const { appointments } = useAppointments();
@@ -29,8 +32,9 @@ export function StatsPage() {
   const { patients } = usePatients();
   const { payments } = usePayments();
   const navigate = useNavigate();
+
   const today = new Date().toISOString().split("T")[0];
-  console.log("Today:", appointments);
+
   const todayAppointments = appointments.filter(
     (appt) => appt.appointment_datetime.slice(0, 10) === today
   );
@@ -42,6 +46,7 @@ export function StatsPage() {
     (acc, payment) => acc + (Number(payment?.amount) || 0),
     0
   );
+
   const treatmentCounts = appointments
     .filter((appt) => appt.treatment?.name)
     .reduce<Record<string, number>>((acc, appt) => {
@@ -50,9 +55,15 @@ export function StatsPage() {
       return acc;
     }, {});
 
-  const mostCommonTreatment =
-    Object.entries(treatmentCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
-    "N/A";
+  const mostCommonTreatmentEntry = Object.entries(treatmentCounts).sort(
+    (a, b) => b[1] - a[1]
+  )[0];
+  const mostCommonTreatment = mostCommonTreatmentEntry?.[0] || "N/A";
+  const mostCommonTreatmentCount = mostCommonTreatmentEntry?.[1] || 0;
+
+  const attendedAppointments = appointments.filter(
+    (appt) => appt.status === "completed"
+  );
 
   const summaryCards = [
     {
@@ -72,9 +83,17 @@ export function StatsPage() {
       bgColor: "bg-green-100",
     },
     {
+      title: "Citas Atendidas",
+      value: attendedAppointments.length.toString(),
+      description: "Total finalizadas hasta hoy",
+      icon: CheckCircle,
+      color: "text-lime-600",
+      bgColor: "bg-lime-100",
+    },
+    {
       title: "Tratamiento más común",
       value: mostCommonTreatment,
-      description: "El más aplicado recientemente",
+      description: `${mostCommonTreatmentCount} veces aplicado`,
       icon: LineChart,
       color: "text-purple-600",
       bgColor: "bg-purple-100",
@@ -87,20 +106,15 @@ export function StatsPage() {
       color: "text-emerald-600",
       bgColor: "bg-emerald-100",
     },
+    {
+      title: "Alertas Inventario",
+      value: inventoryAlerts.length.toString(),
+      description: "Materiales con stock bajo",
+      icon: AlertTriangle,
+      color: "text-red-600",
+      bgColor: "bg-red-100",
+    },
   ];
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "confirmada":
-        return "bg-green-100 text-green-800";
-      case "en-curso":
-        return "bg-blue-100 text-blue-800";
-      case "pendiente":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -118,7 +132,7 @@ export function StatsPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {summaryCards.map((card, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

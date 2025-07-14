@@ -17,11 +17,12 @@ import type { AuthStore } from "@/features/auth/interfaces";
 import { appRoutes } from "@/routes";
 import { SmileIcon, CalendarDays, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import useAppointments from "@/features/appointments/hooks/useAppointments";
 
 export function AppSidebar() {
   const { user } = useAuthStore() as AuthStore;
   const location = useLocation();
-
+  const { appointments } = useAppointments();
   return (
     <Sidebar>
       <div className="flex h-full flex-col bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
@@ -94,7 +95,14 @@ export function AppSidebar() {
                     Citas Hoy
                   </p>
                   <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                    23
+                    {
+                      appointments.filter(
+                        (appointment) =>
+                          new Date(
+                            appointment.appointment_datetime
+                          ).toDateString() === new Date().toDateString()
+                      ).length
+                    }
                   </p>
                 </div>
               </div>
