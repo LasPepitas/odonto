@@ -72,9 +72,11 @@ INSERT INTO `dentist` (`id`, `user_id`) VALUES
 CREATE TABLE `inventory` (
   `id` int(10) UNSIGNED NOT NULL,
   `material_name` varchar(255) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 0,
-  `unit` varchar(20) NOT NULL,
-  `min_stock` int(11) NOT NULL DEFAULT 0
+  `categoria` varchar(100) NOT NULL,
+  `actual_stock` int(11) NOT NULL DEFAULT 0,
+  `min_stock` int(11) NOT NULL DEFAULT 0,
+  `proveedor` varchar(150) NOT NULL,
+  `costo_unitario` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
