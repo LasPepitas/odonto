@@ -20,7 +20,6 @@ import { Badge } from "@/components/ui/badge";
 import useAppointments from "@/features/appointments/hooks/useAppointments";
 import { useEffect } from "react";
 import useInventory from "@/features/inventory/hooks/useInventory";
-import { l } from "node_modules/@clerk/clerk-react/dist/useAuth-DN6TRwS8.d.mts";
 
 export function AppSidebar() {
   const { user } = useAuthStore() as AuthStore;
