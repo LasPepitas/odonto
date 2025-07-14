@@ -14,6 +14,7 @@ import {
   BarChart,
   LayoutDashboard,
 } from "lucide-react";
+import PaymentsPage from "@/features/payments/Index";
 type AppRoute = {
   path: string;
   label: string;
@@ -55,7 +56,7 @@ export const appRoutes: AppRoute[] = [
     path: "/dashboard/pagos",
     label: "Pagos",
     rols: ["admin", "receptionist"],
-    element: <div>Pagos</div>, // reemplazar por: <PaymentsPage />
+    element: <PaymentsPage />,
     icon: DollarSign,
   },
   {
