@@ -65,13 +65,16 @@ export function PatientManagement({
   setModalDeleteOpen,
   setSelectedPatient,
   searchTerm = "",
+  patients,
+  isLoading,
 }: {
   setModalEditOpen: (open: boolean) => void;
   setModalDeleteOpen: (open: boolean) => void;
   setSelectedPatient: (patient: Patient | null) => void;
   searchTerm?: string;
+  patients: Patient[];
+  isLoading: boolean;
 }) {
-  const { patients, isLoading } = UsePatients() as UsePatientsReturn;
   const filteredPatients = patients.filter(
     (patient) =>
       patient.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

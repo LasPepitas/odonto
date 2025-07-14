@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ModalAdd from "./components/ModalAdd";
-import { inventory } from "./utils";
 import {
   Card,
   CardContent,
@@ -11,14 +10,21 @@ import {
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import InventoryTable from "./components/InventoryTable";
+import useInventory from "./hooks/useInventory";
+import ModalEdit from "./components/ModalEdit";
+import ModalDelete from "./components/ModalDelete";
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const filteredInventory = inventory.filter(
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const { addItem, items, loading, updateItem, deleteItem } = useInventory();
+  const filteredInventory = items.filter(
     (item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.supplier.toLowerCase().includes(searchTerm.toLowerCase())
+      item.material_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.categoria?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.proveedor?.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
     <div className="space-y-2">
@@ -42,8 +48,10 @@ const InventoryPage = () => {
             />
           </div>
           <ModalAdd
-            isDialogOpen={isDialogOpen}
-            setIsDialogOpen={setIsDialogOpen}
+            isDialogOpen={isModalAddOpen}
+            setIsDialogOpen={setIsModalAddOpen}
+            addItem={addItem}
+            loading={loading}
           />
         </div>
       </Card>
@@ -55,9 +63,27 @@ const InventoryPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <InventoryTable inventory={filteredInventory} />
+          <InventoryTable
+            inventory={filteredInventory}
+            setSelectedItem={setSelectedItem}
+            setIsModalEditOpen={setIsModalEditOpen}
+            setIsModalDeleteOpen={setIsModalDeleteOpen}
+          />
         </CardContent>
       </Card>
+      <ModalEdit
+        isOpen={isModalEditOpen}
+        setIsOpen={setIsModalEditOpen}
+        onUpdate={updateItem}
+        loading={loading}
+        item={selectedItem}
+      />
+      <ModalDelete
+        isOpen={isModalDeleteOpen}
+        setIsOpen={setIsModalDeleteOpen}
+        item={selectedItem}
+        onConfirm={deleteItem}
+      />
     </div>
   );
 };

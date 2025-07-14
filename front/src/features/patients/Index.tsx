@@ -66,6 +66,8 @@ export default function PatientsPage() {
             setModalDeleteOpen={setIsModalDeleteOpen}
             setSelectedPatient={setSelectedPatient}
             searchTerm={searchTerm}
+            patients={filteredPatients}
+            isLoading={isLoading}
           />
         </CardContent>
       </Card>
