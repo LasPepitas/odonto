@@ -14,22 +14,15 @@ import { SmileIcon as Tooth, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
 import type { AuthStore } from "../interfaces";
-// interface LoginFormProps {
-//   onToggleMode: () => void;
-// }
-
-// TODO: ARREGLAR ERRORES DE TIPADO
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const { login, loading } = useAuthStore() as AuthStore;
+
   const handleLogin = async () => {
-    if (loading) return; // Evita múltiples clics si ya está cargando
+    if (loading) return;
     if (!credentials.email || !credentials.password) {
       alert("Por favor, completa todos los campos.");
       return;
@@ -38,34 +31,33 @@ export function LoginForm() {
       email: credentials.email,
       password: credentials.password,
     });
-    // Redirige al usuario a la página de dashboard después de iniciar sesión
     navigate("/dashboard");
   };
 
   return (
-    <Card className="w-full shadow-xl max-w-md mx-auto mt-10">
-      <CardHeader className="space-y-1 text-center">
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-blue-600 p-3 rounded-full">
-            <Tooth className="h-8 w-8 text-white" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white px-4">
+      <Card className="w-full max-w-md shadow-2xl border border-blue-100">
+        <CardHeader className="text-center space-y-2">
+          <div className="flex justify-center">
+            <div className="bg-blue-600 p-3 rounded-full animate-bounce">
+              <Tooth className="h-8 w-8 text-white" />
+            </div>
           </div>
-        </div>
-        <CardTitle className="text-2xl font-bold text-gray-900 ">
-          DentalCare Pro
-        </CardTitle>
-        <CardDescription className="text-gray-600">
-          Ingresa a tu cuenta para gestionar tu clínica dental
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <form>
+          <CardTitle className="text-2xl font-bold text-gray-900">
+            Bienvenido a DentalCare Pro
+          </CardTitle>
+          <CardDescription className="text-gray-500">
+            Accede a tu cuenta para gestionar tu clínica
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Correo electrónico</Label>
             <Input
               id="email"
               type="email"
               placeholder="doctor@clinica.com"
-              className="w-full"
               value={credentials.email}
               onChange={(e) =>
                 setCredentials({
@@ -75,6 +67,7 @@ export function LoginForm() {
               }
             />
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="password">Contraseña</Label>
             <div className="relative">
@@ -82,11 +75,11 @@ export function LoginForm() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="w-full pr-10"
                 value={credentials.password}
                 onChange={(e) =>
                   setCredentials({ ...credentials, password: e.target.value })
                 }
+                className="pr-10"
               />
               <Button
                 type="button"
@@ -103,25 +96,26 @@ export function LoginForm() {
               </Button>
             </div>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col space-y-4">
-        <Button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 hover:bg-blue-700"
-        >
-          {loading ? "Cargando..." : "Iniciar Sesión"}
-        </Button>
-        <div className="text-center text-sm text-gray-600">
-          ¿No tienes cuenta?{" "}
-          <button
-            onClick={() => navigate("/register")}
-            className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+        </CardContent>
+
+        <CardFooter className="flex flex-col space-y-4">
+          <Button
+            onClick={handleLogin}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition"
           >
-            Regístrate aquí
-          </button>
-        </div>
-      </CardFooter>
-    </Card>
+            {loading ? "Cargando..." : "Iniciar Sesión"}
+          </Button>
+          <p className="text-sm text-gray-600 text-center">
+            ¿No tienes cuenta?{" "}
+            <span
+              className="text-blue-600 hover:underline cursor-pointer font-medium"
+              onClick={() => navigate("/register")}
+            >
+              Regístrate aquí
+            </span>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

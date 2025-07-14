@@ -22,20 +22,22 @@ import type { UsePatientsReturn } from "@/features/patients/interfaces";
 import useUsers from "@/features/users/hooks/useUsers";
 import useTreatments from "@/features/treatment/hooks/useTreatments";
 import { useState } from "react";
-import useAppointments from "../hooks/useAppointments";
-import type { UseAppointmentsReturn } from "../interfaces";
+import type { AppointmentRequest } from "../interfaces";
 
 const ModalAdd = ({
   isDialogOpen,
   setIsDialogOpen,
+  addAppointment,
+  loading = false,
 }: {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
+  addAppointment: (appointmentData: AppointmentRequest) => Promise<void>;
+  loading?: boolean;
 }) => {
   const { patients } = UsePatients() as UsePatientsReturn;
   const { dentists } = useUsers();
   const { treatments } = useTreatments();
-  const { addAppointment } = useAppointments() as UseAppointmentsReturn;
 
   const [appointmentData, setAppointmentData] = useState({
     patient_id: "",
@@ -177,7 +179,7 @@ const ModalAdd = ({
             onClick={handleAddAppointment}
             className="cursor-pointer"
           >
-            Agendar Cita
+            {loading ? "Cargando..." : "Agendar Cita"}
           </Button>
         </DialogFooter>
       </DialogContent>

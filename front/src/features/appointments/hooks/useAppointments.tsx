@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import type { AppointmentRequest } from "../interfaces";
+import type { Appointment, AppointmentRequest } from "../interfaces";
 import { createAppointment, getAppointments } from "../services";
+import { convertAppointmentToEvent } from "../utils";
 const useAppointments = () => {
-  const [appointments, setAppointments] = useState([]);
-  const [notPayedAppointments, setNotPaidAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [notPayedAppointments, setNotPaidAppointments] = useState<
+    Appointment[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const addAppointment = async (appointmentData: AppointmentRequest) => {
@@ -11,7 +14,10 @@ const useAppointments = () => {
     setError(null);
     try {
       const newAppointment = await createAppointment(appointmentData);
-      setAppointments((prev) => [...prev, newAppointment]);
+      setAppointments((prev) => [
+        ...prev,
+        convertAppointmentToEvent(newAppointment.data),
+      ]);
     } catch (err) {
       setError("Error al crear cita");
       console.error(err);
@@ -40,6 +46,7 @@ const useAppointments = () => {
   }, []);
   return {
     appointments,
+    setAppointments,
     loading,
     error,
     addAppointment,

@@ -9,6 +9,7 @@ import ModalAdd from "./components/ModalAdd";
 import ModalEventDetails from "./components/ModalEventDetails";
 import useAppointments from "./hooks/useAppointments";
 import { convertAppointmentsToEvents } from "./utils";
+import type { UseAppointmentsReturn } from "./interfaces";
 
 moment.locale("es");
 const localizer = momentLocalizer(moment);
@@ -34,7 +35,8 @@ const AppointmentsPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
-  const { appointments } = useAppointments();
+  const { appointments, addAppointment, loading } =
+    useAppointments() as UseAppointmentsReturn;
   const events = convertAppointmentsToEvents(appointments);
 
   const handleSelectEvent = (event: any) => {
@@ -76,6 +78,8 @@ const AppointmentsPage = () => {
       <ModalAdd
         isDialogOpen={isModalAddOpen}
         setIsDialogOpen={setIsModalAddOpen}
+        addAppointment={addAppointment}
+        loading={loading}
       />
 
       <ModalEventDetails

@@ -6,26 +6,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search, Edit, Trash2, Phone } from "lucide-react";
+import { Search } from "lucide-react";
 import ModalAddPatient from "./components/ModalAddPatient";
 import UsePatients from "./hooks/UsePatients";
-import type { UsePatientsReturn } from "./interfaces";
+import type { UsePatientsReturn, Patient } from "./interfaces";
 import { PatientManagement } from "./components/PatientsTable";
+import ModalEditPatient from "./components/ModalEditPatient";
+import ModalDeletePatient from "./components/ModalDeletePatient";
 
-export function PatientsPage() {
+export default function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { patients, addPatient, isLoading } =
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const { patients, addPatient, isLoading, updatePatient, deletePatient } =
     UsePatients() as UsePatientsReturn;
   const filteredPatients = patients.filter(
     (patient) =>
@@ -56,8 +52,8 @@ export function PatientsPage() {
                 />
               </div>
               <ModalAddPatient
-                isDialogOpen={isDialogOpen}
-                setIsDialogOpen={setIsDialogOpen}
+                isDialogOpen={isModalAddOpen}
+                setIsDialogOpen={setIsModalAddOpen}
                 addPatient={addPatient}
                 isLoading={isLoading}
               />
@@ -66,12 +62,27 @@ export function PatientsPage() {
         </CardHeader>
         <CardContent>
           <PatientManagement
-            patients={filteredPatients}
-            isLoading={isLoading}
-            setIsDialogOpen={setIsDialogOpen}
+            setModalEditOpen={setIsModalEditOpen}
+            setModalDeleteOpen={setIsModalDeleteOpen}
+            setSelectedPatient={setSelectedPatient}
+            searchTerm={searchTerm}
           />
         </CardContent>
       </Card>
+      <ModalEditPatient
+        isOpen={isModalEditOpen}
+        setIsOpen={setIsModalEditOpen}
+        selectedPatient={selectedPatient}
+        updatePatient={updatePatient}
+        isLoading={isLoading}
+      />
+      <ModalDeletePatient
+        isOpen={isModalDeleteOpen}
+        setIsOpen={setIsModalDeleteOpen}
+        selectedPatient={selectedPatient}
+        deletePatient={deletePatient}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

@@ -21,6 +21,14 @@ function App() {
           {appRoutes.map(({ path, element }) => (
             <Route key={path} path={path} element={element} />
           ))}
+          <Route
+            path="/dashboard"
+            element={<Navigate to="/dashboard/" replace />}
+          />
+          <Route
+            path="/dashboard/*"
+            element={<Navigate to="/dashboard/" replace />}
+          />
         </Route>
         <Route path="*" element={<PublicRoutes />} />
       </Routes>
