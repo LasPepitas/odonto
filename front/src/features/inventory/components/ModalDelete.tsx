@@ -26,7 +26,7 @@ const ModalDelete = ({ isOpen, setIsOpen, item, onConfirm }: Props) => {
             <DialogTitle>Eliminar Material</DialogTitle>
             <DialogDescription>
               ¿Estás seguro que deseas eliminar{" "}
-              <strong>{item.material_name}</strong> del inventario? Esta acción
+              <strong>{item?.material_name}</strong> del inventario? Esta acción
               no se puede deshacer.
             </DialogDescription>
           </div>
@@ -39,7 +39,7 @@ const ModalDelete = ({ isOpen, setIsOpen, item, onConfirm }: Props) => {
           <Button
             variant="destructive"
             onClick={() => {
-              onConfirm(item.id);
+              onConfirm(item?.id);
               setIsOpen(false);
             }}
           >
