@@ -19,11 +19,14 @@ import { SmileIcon, CalendarDays, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import useAppointments from "@/features/appointments/hooks/useAppointments";
 import { useEffect } from "react";
+import useInventory from "@/features/inventory/hooks/useInventory";
+import { l } from "node_modules/@clerk/clerk-react/dist/useAuth-DN6TRwS8.d.mts";
 
 export function AppSidebar() {
   const { user } = useAuthStore() as AuthStore;
   const location = useLocation();
   const { appointments, fetchAppointments } = useAppointments();
+  const { items, getInventory } = useInventory();
   useEffect(() => {
     if (user?.dentist_id) {
       fetchAppointments({ dentist_id: user.dentist_id });
@@ -129,7 +132,15 @@ export function AppSidebar() {
                     Alertas
                   </p>
                   <p className="text-xs text-amber-700 dark:text-amber-300">
-                    7 materiales con stock bajo
+                    {/* 7 materiales con stock bajo */}
+                    <span className="font-bold text-2xl">
+                      {
+                        items.filter(
+                          (item) => item.actual_stock < item.min_stock
+                        ).length
+                      }{" "}
+                    </span>
+                    materiales con stock bajo
                   </p>
                 </div>
               </div>
