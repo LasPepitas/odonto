@@ -1,5 +1,6 @@
-
 # 🦷 Odonto
+
+![HOME](docs/img/image.png)
 
 **Odonto** es una aplicación web pensada para la gestión de pacientes, tratamientos y registros clínicos en una clínica odontológica. Desarrollada con un stack moderno utilizando **React** para el frontend, **Laravel** para el backend, y **MySQL** como sistema de base de datos.
 
@@ -26,7 +27,7 @@
 ├── package.json       # Configuración de dependencias para el frontend (o gestión JS)
 ├── bun.lock           # Archivo de bloqueo para gestor de paquetes Bun
 
-````
+```
 
 ---
 
@@ -37,7 +38,7 @@
 ```bash
 git clone https://github.com/LasPepitas/odonto.git
 cd odonto
-````
+```
 
 2. Levanta los servicios:
 
@@ -47,9 +48,9 @@ docker-compose up --build
 
 Esto iniciará:
 
-* React app en `http://localhost:5173`
-* Laravel backend en `http://localhost:8000`
-* Base de datos MySQL en `localhost:3306`
+- React app en `http://localhost:5173`
+- Laravel backend en `http://localhost:8000`
+- Base de datos MySQL en `localhost:3306`
 
 > ⚠️ Asegúrate de tener configuradas correctamente tus variables de entorno en `.env` para Laravel y React si aplica.
 
@@ -95,7 +96,7 @@ Puedes consultar documentación adicional dentro del directorio `docs/`.
 
 ## 📌 Contribuciones
 
-¡Contribuciones son bienvenidas! Si deseas colaborar, abre un *issue* o envía un *pull request* con tus mejoras.
+¡Contribuciones son bienvenidas! Si deseas colaborar, abre un _issue_ o envía un _pull request_ con tus mejoras.
 
 ---
 
@@ -107,4 +108,3 @@ Este proyecto está licenciado bajo los términos de la
 
 Consulta el archivo LICENSE para más detalles, o visita
 https://www.gnu.org/licenses/agpl-3.0.html.
-
