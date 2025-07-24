@@ -63,7 +63,7 @@ class AppointmentController extends Controller
                 'patient_id' => 'required|integer|exists:patient,id',
                 'dentist_id' => 'required|integer|exists:dentist,id',
                 'treatment_id' => 'required|integer|exists:treatment,id',
-                'appointment_datetime' => 'required|date|after:now',
+                'appointment_datetime' => 'required|date',
                 'status' => 'required|string|in:scheduled,completed,cancelled,no_show'
             ]);
 
